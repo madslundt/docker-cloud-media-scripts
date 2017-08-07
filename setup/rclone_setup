@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rclone config --config="/config/rclone.conf"

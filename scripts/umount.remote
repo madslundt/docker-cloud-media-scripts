@@ -1,0 +1,35 @@
+#!/bin/sh
+###############################################################################
+# umount.remote - A script to unmount cloud remotes for use with Plex
+###############################################################################
+# CONFIGURATION
+###############################################################################
+# shellcheck source=config
+
+
+cloud_encrypt_dir="/cloud-encrypt"
+cloud_decrypt_dir="/cloud-decrypt"
+
+local_media_dir="/local-media"
+
+
+###############################################################################
+# FUNCTIONS
+###############################################################################
+
+umount_cloud () {
+	echo "[ $(date $(printenv DATE_FORMAT)) ] Unmounting decrypted cloud mountpoint -> ${cloud_decrypt_dir}"
+	fusermount -uz "${cloud_decrypt_dir}"
+	echo "[ $(date $(printenv DATE_FORMAT)) ] Unmounting cloud mountpoint -> ${cloud_encrypt_dir}"
+	fusermount -uz "${cloud_encrypt_dir}"
+}
+
+umount_union () {
+	echo "[ $(date $(printenv DATE_FORMAT)) ] Unmounting Plex library mountpoint -> ${local_media_dir}"
+	fusermount -uz "$local_media_dir"
+}
+
+###############################################################################
+
+umount_cloud
+umount_union
