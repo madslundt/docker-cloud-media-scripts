@@ -22,7 +22,7 @@ mount_gdrive () {
 	fi
 
 	# Mount GD if not already mounted.
-	if ! mountpoint -q "$cloud_encrypt_dir" ; then
+	if [ $(ps -ef | grep "plexdrive" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting Google Drive mountpoint: ${cloud_encrypt_dir}"
 		screen -dmS plexdrive plexdrive $mongo $plexdrive_options "${cloud_encrypt_dir}"
 	else
@@ -36,7 +36,7 @@ mount_local_media () {
 		mkdir -p "${cloud_decrypt_dir}"
 	fi
 
-	if ! mountpoint -q "$cloud_decrypt_dir"; then
+	if [ $(ps -ef | grep "rclone" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
 		rclone mount $rclone_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" >/dev/null 2>&1
 	else
@@ -56,7 +56,7 @@ mount_union () {
 
 
 	# Mount plex media directory if not already mounted.
-	if ! mountpoint -q "${local_media_dir}"; then
+	if [ $(ps -ef | grep "unionfs" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting Plex library mountpoint: ${local_media_dir}"
 
 		ufs_mounts="${local_decrypt_dir}=RW:${cloud_decrypt_dir}=RO"
@@ -68,6 +68,11 @@ mount_union () {
 }
 
 ###############################################################################
+
+if pidof -o %PPID -x "$(basename "$0")"; then
+	echo "[ $(date $(printenv DATE_FORMAT)) ] Upload already in progress. Aborting."
+	exit 3
+fi
 
 mount_gdrive
 mount_local_media

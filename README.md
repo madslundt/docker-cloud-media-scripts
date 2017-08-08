@@ -40,7 +40,7 @@ Volumes:
 * `-v /local-decrypt` - Local files
 * `-v /config` - Rclone and plexdrive configurations
 * `-v /chunks` - Plexdrive cache chunks
-* `-v /log` - Log files from mount, umount, cloudupload and rmlocal
+* `-v /log` - Log files from mount, cloudupload and rmlocal
 * `-v /cloud-encrypt` - Cloud files encrypted synced with Plexdrive
 * `-v /cloud-decrypt` - Cloud files decrypted with Rclone
 * `-v /data/db` - MongoDB databases
@@ -105,8 +105,6 @@ Plexdrive documentation if needed [click here](https://github.com/dweidenfeld/pl
 Upload run `docker exec <DOCKER_CONTAINER> cloudupload`
 
 Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
-
-Umount local files run `docker exec <DOCKER_CONTAINER> umount`
 
 Mount local files run `docker exec <DOCKER_CONTAINER> mount`
 
