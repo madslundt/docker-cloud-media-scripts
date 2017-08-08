@@ -40,8 +40,8 @@ find "${local_decrypt_dir}" -type f |
 
 		# Copy file to remote destination[s], retaining path
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Transfering file -> ${n} to Google Drive in ${destpath}."
-		/bin/bash -c rclone copy $rclone_options "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+		rclone copy $rclone_options "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
 	done
 
 # success!
-exit 02
+exit 0

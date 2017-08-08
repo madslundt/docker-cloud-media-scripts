@@ -6,8 +6,12 @@ cloud_decrypt_dir="/cloud-decrypt"
 local_decrypt_dir="/local-decrypt"
 local_media_dir="/local-media"
 
-rclone_options="--config=\"/config/rclone.conf\" --read-only --allow-non-empty --allow-other --buffer-size $(printenv BUFFER_SIZE) --max-read-ahead $(printenv MAX_READ_AHEAD) --checkers $(printenv CHECKERS)"
+rclone_config="--config=\"/config/rclone.conf\""
+rclone_options="${rclone_config} --read-only --allow-non-empty --allow-other --buffer-size $(printenv BUFFER_SIZE) --max-read-ahead $(printenv MAX_READ_AHEAD) --checkers $(printenv CHECKERS)"
 
 plexdrive_temp_dir="/chunks"
-plexdrive_options="--config=\"/config\" --temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size$(printenv CLEAR_CHUNK_MAX_SIZE) --chunk-size=$(printenv CHUNK_SIZE)"
+plexdrive_config="--config=\"/config\""
+plexdrive_options="${plexdrive_config} --temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size=$(printenv CLEAR_CHUNK_MAX_SIZE) --chunk-size=$(printenv CHUNK_SIZE)"
 mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
+
+log_dir="/log"

@@ -24,7 +24,7 @@ mount_gdrive () {
 	# Mount GD if not already mounted.
 	if ! mountpoint -q "$cloud_encrypt_dir" ; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting Google Drive mountpoint: ${cloud_encrypt_dir}"
-		/bin/bash -c screen -dmS plexdrive /bin/bash -c plexdrive $mongo $plexdrive_options "${cloud_encrypt_dir}"
+		screen -dmS plexdrive plexdrive $mongo $plexdrive_options "${cloud_encrypt_dir}"
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Google Drive mountpoint: ${cloud_encrypt_dir} already mounted."
 	fi
@@ -38,7 +38,7 @@ mount_local_media () {
 
 	if ! mountpoint -q "$cloud_decrypt_dir"; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
-		/bin/bash -c rclone mount $rclone_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" >/dev/null 2>&1
+		rclone mount $rclone_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" >/dev/null 2>&1
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Decrypted Google Drive mountpoint: ${cloud_decrypt_dir} already mounted."
 	fi
@@ -61,7 +61,7 @@ mount_union () {
 
 		ufs_mounts="${local_decrypt_dir}=RW:${cloud_decrypt_dir}=RO"
 
-		/bin/bash -c unionfs $ufs_options "${ufs_mounts}" "${local_media_dir}"
+		unionfs $ufs_options "${ufs_mounts}" "${local_media_dir}"
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Plex library mountpoint: ${local_media_dir} already mounted."
 	fi

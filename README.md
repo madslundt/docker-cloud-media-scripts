@@ -82,23 +82,23 @@ Most of the configuration to set up is done through Rclone. Read their documenta
  - Encryption and decryption for your cloud storage.
  - Encryption and decryption for your local storage.
 
-Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> bash -c rclone_setup`
+Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 
-Setup Plexdrive run `docker exec -ti <DOCKER_CONTAINER> bash -c plexdrive_setup`
+Setup Plexdrive run `docker exec -ti <DOCKER_CONTAINER> plexdrive_setup`
 
 ## Commands
-Upload run `docker exec <DOCKER_CONTAINER> bash -c cloudupload`
+Upload run `docker exec <DOCKER_CONTAINER> cloudupload`
 
-Remove local files run `docker exec <DOCKER_CONTAINER> bash -c rmlocal`
+Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
 
-Umount local files run `docker exec <DOCKER_CONTAINER> bash -c umount`
+Umount local files run `docker exec <DOCKER_CONTAINER> umount`
 
-Mount local files run `docker exec <DOCKER_CONTAINER> bash -c mount`
+Mount local files run `docker exec <DOCKER_CONTAINER> mount`
 
 ## Cron jobs
 Setup cron jobs to upload and remove local files:
- - `@daily docker exec <DOCKER_CONTAINER> bash -c cloudupload`
- - `@weekly docker exec <DOCKER_CONTAINER> bash -c rmlocal`
+ - `@daily docker exec <DOCKER_CONTAINER> cloudupload`
+ - `@weekly docker exec <DOCKER_CONTAINER> rmlocal`
 
 
 # How this works?
@@ -147,7 +147,7 @@ UnionFS is used to mount both cloud and local media to a local folder (`/local-m
 The reason for these permissions are that when writing to the local folder (`/local-media`) it will not try to write it directly to the cloud storage `/cloud-decrypt`, but instead to the local storage (`/local-decrypt`). Later this will be encrypted and uploaded to the cloud by Rclone.
 
 
-# Build your own
+# Build from Dockerfile
 ## Build
 `docker build -t cloud-media-scripts .`
 

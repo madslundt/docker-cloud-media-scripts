@@ -25,7 +25,7 @@ RUN \
 
 
 ####################
-# ENVIRONMENTS
+# ENVIRONMENT VARIABLES
 ####################
 # Rclone
 ENV BUFFER_SIZE "500M"
@@ -79,4 +79,4 @@ WORKDIR /data
 ####################
 # COMMANDS
 ####################
-CMD ["mongod", "/bin/bash -c mount"]
+CMD ["/usr/local/bin/startup"]

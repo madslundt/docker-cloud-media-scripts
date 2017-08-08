@@ -1,3 +1,3 @@
 #!/bin/sh
 
-bash -c mount.script &>> ./log/mount.log
+mount.script &>> "${log_dir}/mount.log"
