@@ -2,7 +2,7 @@ Getting started
 ===============
 ## Usage
 
-Default settings is created with atleast 4 TB free space to local media and caching:
+Default settings uses ~100 GB for local media and removes atleast 80 GB and Plexdrive cache is removed after 24h.
 ```
 docker create \
 	--name cloud-media-scripts \
@@ -13,7 +13,9 @@ docker create \
 	madslundt/cloud-media-scripts
 ```
 
-Settings to a hard drive with less than 500 GB of free space to local media and caching:
+If you have more space you can increase `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` `FREEUP_ATLEAST_GB` and increase `CLEAR_CHUNK_AGE` or add `CLEAR_CHUNK_MAX_SIZE`.
+
+Example of having `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` to 2.5 TB, `FREEUP_ATLEAST_GB` 1 TB and `CLEAR_CHUNK_MAX_SIZE` 1.5 TB:
 ```
 docker create \
 	--name cloud-media-scripts \
@@ -21,25 +23,12 @@ docker create \
 	-v /configurations:/config \
 	-v /plexdrive-chunks:/chunks \
 	-v /logs:/log \
-    -e CLEAR_CHUNK_MAX_SIZE="150G" \
-    -e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB="150" \
-    -e FREEUP_ATLEAST_GB="100" \
+    -e CLEAR_CHUNK_MAX_SIZE="1500G" \
+    -e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB="2000" \
+    -e FREEUP_ATLEAST_GB="1000" \
 	madslundt/cloud-media-scripts
 ```
 
-Or set it to remove local content if more than 3 days old:
-```
-docker create \
-	--name cloud-media-scripts \
-	-v /media:/local-media \
-	-v /configurations:/config \
-	-v /plexdrive-chunks:/chunks \
-	-v /logs:/log \
-    -e CLEAR_CHUNK_MAX_SIZE="300G" \
-    -e REMOVE_LOCAL_FILES_BASED_ON="time" \
-    -e REMOVE_LOCAL_FILES_AFTER_DAYS="3" \
-	madslundt/cloud-media-scripts
-```
 
 ## Parameters
 The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side.
@@ -57,20 +46,20 @@ Volumes:
 * `-v /data/db` - MongoDB databases
 
 Environment variables:
-* `-e BUFFER_SIZE` - Rclone: Buffer size when copying files (default 500M)
-* `-e MAX_READ_AHEAD` - Rclone: The number of bytes that can be prefetched for sequential reads (default 30G)
-* `-e CHECKERS` - Rclone: Number of checkers to run in parallel (default 16)
-* `-e RCLONE_CLOUD_ENDPOINT` - Rclone cloud endpoint (default gd-crypt:)
-* `-e RCLONE_LOCAL_ENDPOINT` - Rclone local endpoint (default local-crypt:)
-* `-e CHUNK_SIZE` - Plexdrive: The size of each chunk that is downloaded (default 10M)
-* `-e CLEAR_CHUNK_MAX_SIZE` - Plexdrive: The maximum size of the temporary chunk directory(default 1000G)
-* `-e CLEAR_CHUNK_AGE` - Plexdrive: The maximum age of a cached chunk file (default 24h) - this is ignored if `CLEAR_CHUNK_MAX_SIZE` is set to more than 0
-* `-e MONGO_DATABASE` - Mongo database used for Plexdrive (default plexdrive)
-* `-e DATE_FORMAT` - Date format for loggin (default +%F@%T)
-* `-e REMOVE_LOCAL_FILES_BASED_ON` - Remove local files based on `space` or `time` (default space)
-* `-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` - Remove local files when local storage exceeds this value in GB (default 2500) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
-* `-e FREEUP_ATLEAST_GB` - Removing atleast this value in GB on removal (default 1000) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
-* `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default 60) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space
+* `-e BUFFER_SIZE` - Rclone: Buffer size when copying files (default **500M**)
+* `-e MAX_READ_AHEAD` - Rclone: The number of bytes that can be prefetched for sequential reads (default **30G**)
+* `-e CHECKERS` - Rclone: Number of checkers to run in parallel (default **16**)
+* `-e RCLONE_CLOUD_ENDPOINT` - Rclone: Cloud endpoint (default **gd-crypt:**)
+* `-e RCLONE_LOCAL_ENDPOINT` - Rclone: Local endpoint (default **local-crypt:**)
+* `-e CHUNK_SIZE` - Plexdrive: The size of each chunk that is downloaded (default **10M**)
+* `-e CLEAR_CHUNK_MAX_SIZE` - Plexdrive: The maximum size of the temporary chunk directory (empty as default)
+* `-e CLEAR_CHUNK_AGE` - Plexdrive: The maximum age of a cached chunk file (default **24h**) - this is ignored if `CLEAR_CHUNK_MAX_SIZE` is not set
+* `-e MONGO_DATABASE` - Mongo database used for Plexdrive (default **plexdrive**)
+* `-e DATE_FORMAT` - Date format for loggin (default **+%F@%T**)
+* `-e REMOVE_LOCAL_FILES_BASED_ON` - Remove local files based on `space` or `time` (default **space**)
+* `-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` - Remove local files when local storage exceeds this value in GB (default **100**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
+* `-e FREEUP_ATLEAST_GB` - Removing atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
+* `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space
 
 
 
@@ -105,12 +94,12 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 	- Enter the same password as you did with the cloud storage.
 	- Enter the same pass phrase as you did with the cloud storage.
 
-Rclone documentation if needed: https://rclone.org/docs/
+Rclone documentation if needed [click here](https://rclone.org/docs/)
 
 ### Plexdrive
 Setup Plexdrive to the cloud. Run the command `docker exec -ti <DOCKER_CONTAINER> plexdrive_setup`
 
-Plexdrive documentation if needed: https://github.com/dweidenfeld/plexdrive/tree/4.0.0
+Plexdrive documentation if needed [click here](https://github.com/dweidenfeld/plexdrive/tree/4.0.0)
 
 ## Commands
 Upload run `docker exec <DOCKER_CONTAINER> cloudupload`

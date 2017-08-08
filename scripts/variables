@@ -11,7 +11,10 @@ rclone_options="${rclone_config} --read-only --allow-non-empty --allow-other --b
 
 plexdrive_temp_dir="/chunks"
 plexdrive_config="--config=\"/config\""
-plexdrive_options="${plexdrive_config} --temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size=$(printenv CLEAR_CHUNK_MAX_SIZE) --chunk-size=$(printenv CHUNK_SIZE)"
+plexdrive_options="${plexdrive_config} --temp=${plexdrive_temp_dir} -o allow_other --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE)"
+if [ -n $(printenv CLEAR_CHUNK_MAX_SIZE) ]; then
+    plexdrive_options="${plexdrive_options} --clear-chunk-max-size=$(printenv CLEAR_CHUNK_MAX_SIZE)"
+fi
 mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
 
 log_dir="/log"
