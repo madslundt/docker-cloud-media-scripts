@@ -5,16 +5,16 @@ if [ ! -d "${log_dir}" ]; then
 	mkdir -p "${log_dir}"
 fi
 
-if [ ! $(printenv RCLONE_LOCAL_ENDPOINT) == "*:*" ]; then
+if [[ ! "$(printenv RCLONE_LOCAL_ENDPOINT)" =~ .*:.* ]]; then
 	echo "Missing an : in RCLONE_LOCAL_ENDPOINT ($(printenv RCLONE_LOCAL_ENDPOINT))"
 	exit 02
-elif [ ! $(printenv RCLONE_CLOUD_ENDPOINT) == "*:*" ]; then
+elif [[ ! "$(printenv RCLONE_CLOUD_ENDPOINT)" =~ .*:.* ]]; then
 	echo "Missing an : in RCLONE_CLOUD_ENDPOINT ($(printenv RCLONE_CLOUD_ENDPOINT))"
 	exit 02
-elif ! $(rclone listremotes $rclone_options | grep $(printenv RCLONE_LOCAL_ENDPOINT)); then
+elif [ "$(rclone listremotes $rclone_config | grep $(printenv RCLONE_LOCAL_ENDPOINT) | wc -l)" == "0" ]; then
 	echo "RCLONE_LOCAL_ENDPOINT ($(printenv RCLONE_LOCAL_ENDPOINT)) endpoint has not been created within rclone"
 	exit 02
-elif ! $(rclone listremotes $rclone_options | grep $(printenv RCLONE_CLOUD_ENDPOINT)); then
+elif [ "$(rclone listremotes $rclone_config | grep $(printenv RCLONE_CLOUD_ENDPOINT) | wc -l)" == "0" ]; then
 	echo "RCLONE_CLOUD_ENDPOINT ($(printenv RCLONE_CLOUD_ENDPOINT)) endpoint has not been created within rclone"
 	exit 02
 fi

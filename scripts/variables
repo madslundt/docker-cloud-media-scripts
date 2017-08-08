@@ -10,8 +10,7 @@ rclone_config="--config=/config/rclone.conf"
 rclone_options="${rclone_config} --read-only --allow-non-empty --allow-other --buffer-size $(printenv BUFFER_SIZE) --max-read-ahead $(printenv MAX_READ_AHEAD) --checkers $(printenv CHECKERS)"
 
 plexdrive_temp_dir="/chunks"
-plexdrive_config="--config=/config"
-plexdrive_options="${plexdrive_config} --temp=${plexdrive_temp_dir} -o allow_other --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE)"
+plexdrive_options="--config=/config --temp=${plexdrive_temp_dir} -o allow_other --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE)"
 if [ -n $(printenv CLEAR_CHUNK_MAX_SIZE) ]; then
     plexdrive_options="${plexdrive_options} --clear-chunk-max-size=$(printenv CLEAR_CHUNK_MAX_SIZE)"
 fi
