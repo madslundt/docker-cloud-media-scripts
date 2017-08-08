@@ -1,7 +1,7 @@
 #!/bin/bash
 
-/bin/bash -c mongod &&
+/bin/bash -c mongod &
 
-/bin/bash -c mount &&
+/bin/bash -c mount &
 
 exit 0

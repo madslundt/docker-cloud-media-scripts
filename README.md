@@ -10,6 +10,7 @@ docker create \
 	-v /configurations:/config \
 	-v /plexdrive-chunks:/chunks \
 	-v /logs:/log \
+	--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse \
 	madslundt/cloud-media-scripts
 ```
 
@@ -26,6 +27,7 @@ docker create \
     -e CLEAR_CHUNK_MAX_SIZE="1500G" \
     -e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB="2000" \
     -e FREEUP_ATLEAST_GB="1000" \
+	--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse \
 	madslundt/cloud-media-scripts
 ```
 
@@ -61,7 +63,7 @@ Environment variables:
 * `-e FREEUP_ATLEAST_GB` - Removing atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
 * `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space
 
-
+`--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse \` must be there for fuse to work within the container.
 
 ## Setup
 After the docker image has been setup and running, Rclone and Plexdrive need to be configured.
@@ -89,7 +91,7 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 	- Create new remote [Press N]
 	- Give it thye same name as specified in the environment variable `RCLONE_LOCAL_ENDPOINT` but without colon : (default local-crypt)
 	- Choose Encrypt/Decrypt a remote [Press 5]
-	- Enter the encrypted folder [Enter '/cloud-encrypt' without quotes]
+	- Enter the encrypted folder: /cloud-encrypt. If you are using subdirectory append it to it. Example /cloud-encrypt/Media
 	- Choose the same filename encrypted as you did with the cloud storage.
 	- Enter the same password as you did with the cloud storage.
 	- Enter the same pass phrase as you did with the cloud storage.
