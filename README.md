@@ -57,14 +57,14 @@ Volumes:
 * `-v /data/db` - MongoDB databases
 
 Environment variables:
-* `-e BUFFER_SIZE` - Rclone buffer size (default 500M)
-* `-e MAX_READ_AHEAD` - Rclone max read ahead (default 30G)
-* `-e CHECKERS` - Rclone checkers (default 16)
+* `-e BUFFER_SIZE` - Rclone: Buffer size when copying files (default 500M)
+* `-e MAX_READ_AHEAD` - Rclone: The number of bytes that can be prefetched for sequential reads (default 30G)
+* `-e CHECKERS` - Rclone: Number of checkers to run in parallel (default 16)
 * `-e RCLONE_CLOUD_ENDPOINT` - Rclone cloud endpoint (default gd-crypt:)
 * `-e RCLONE_LOCAL_ENDPOINT` - Rclone local endpoint (default local-crypt:)
-* `-e CHUNK_SIZE` - Plexdrive chunk size (default 10M)
-* `-e CLEAR_CHUNK_MAX_SIZE` - Plexdrive buffer size (default 1000G)
-* `-e CLEAR_CHUNK_AGE` - Plexdrive buffer size (default 24h) - this is ignored if `CLEAR_CHUNK_MAX_SIZE` is set to more than 0
+* `-e CHUNK_SIZE` - Plexdrive: The size of each chunk that is downloaded (default 10M)
+* `-e CLEAR_CHUNK_MAX_SIZE` - Plexdrive: The maximum size of the temporary chunk directory(default 1000G)
+* `-e CLEAR_CHUNK_AGE` - Plexdrive: The maximum age of a cached chunk file (default 24h) - this is ignored if `CLEAR_CHUNK_MAX_SIZE` is set to more than 0
 * `-e MONGO_DATABASE` - Mongo database used for Plexdrive (default plexdrive)
 * `-e DATE_FORMAT` - Date format for loggin (default +%F@%T)
 * `-e REMOVE_LOCAL_FILES_BASED_ON` - Remove local files based on `space` or `time` (default space)
@@ -74,17 +74,43 @@ Environment variables:
 
 
 
-## Setup Rclone and Plexdrive
-Most of the configuration to set up is done through Rclone. Read their documentation [here](https://rclone.org/docs/).
+## Setup
+After the docker image has been setup and running, Rclone and Plexdrive need to be configured.
 
-3 configurations are needed to:
- - Endpoint to your cloud storage.
- - Encryption and decryption for your cloud storage.
- - Encryption and decryption for your local storage.
-
+### Rclone
 Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 
-Setup Plexdrive run `docker exec -ti <DOCKER_CONTAINER> plexdrive_setup`
+3 remotes are needed:
+ - Endpoint to your cloud storage.
+	- Create new remote [Press N]
+	- Give it a name example gd
+	- Choose Google Drive [Press 7]
+	- If you have a client id paste it here or leave it blank
+	- Choose headless machine [Press N]
+	- Open the url in your browser and enter the verification code
+ - Encryption and decryption for your cloud storage.
+	- Create new remote [Press N]
+	- Give it thye same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without colon : (default gd-crypt)
+	- Choose Encrypt/Decrypt a remote [Press 5]
+	- Enter the name of the remote created in cloud-storage appended  with a colon (:) and the subfolder on your cloud. Example **gd:/Media** or just **gd:** if you have your files in root.
+	- Choose how to encrypt filenames. I prefer option 2 Encrypt the filenames
+	- Choose to either generate your own or random password. I prefer to enter my own.
+	- Choose to enter pass phrase for the salt or leave it blank. I prefer to enter my own.
+ - Encryption and decryption for your local storage.
+	- Create new remote [Press N]
+	- Give it thye same name as specified in the environment variable `RCLONE_LOCAL_ENDPOINT` but without colon : (default local-crypt)
+	- Choose Encrypt/Decrypt a remote [Press 5]
+	- Enter the encrypted folder [Enter '/cloud-encrypt' without quotes]
+	- Choose the same filename encrypted as you did with the cloud storage.
+	- Enter the same password as you did with the cloud storage.
+	- Enter the same pass phrase as you did with the cloud storage.
+
+Rclone documentation if needed: https://rclone.org/docs/
+
+### Plexdrive
+Setup Plexdrive to the cloud. Run the command `docker exec -ti <DOCKER_CONTAINER> plexdrive_setup`
+
+Plexdrive documentation if needed: https://github.com/dweidenfeld/plexdrive/tree/4.0.0
 
 ## Commands
 Upload run `docker exec <DOCKER_CONTAINER> cloudupload`
