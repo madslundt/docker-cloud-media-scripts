@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 cloud_encrypt_dir="/cloud-encrypt"
 cloud_decrypt_dir="/cloud-decrypt"

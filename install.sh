@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Rclone variables
 rclone_url="https://github.com/ncw/rclone/releases/download/v1.36/rclone-v1.36-linux-amd64.zip"
 rclone_zip="rclone-v1.36-linux-amd64.zip"
