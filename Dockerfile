@@ -2,7 +2,7 @@
 # BASE IMAGE
 ####################
 FROM ubuntu:16.04
-MAINTAINER madslundt
+MAINTAINER madslundt@live.dk <madslundt@live.dk>
 
 
 ####################
