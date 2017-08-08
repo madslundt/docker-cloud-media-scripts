@@ -1,5 +1,0 @@
-#!/bin/bash
-
-. "/usr/local/bin/variables"
-
-umount.script &>> "${log_dir}/umount.log"
