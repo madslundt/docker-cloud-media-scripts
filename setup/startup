@@ -1,6 +1,5 @@
 #!/bin/bash
 
-mongod &
-mount &
+mongod && mount
 
 exit 0
