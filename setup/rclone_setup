@@ -1,3 +1,9 @@
 #!/bin/sh
+. "/usr/local/bin/variables"
 
-rclone config --config="/config/rclone.conf"
+echo "Setup following endpoints in rclone:"
+echo " - Endpoint to your cloud storage"
+echo " - $(printenv RCLONE_CLOUD_ENDPOINT) connected to your cloud storage"
+echo " - $(printenv RCLONE_LOCAL_ENDPOINT) connected to your local storage"
+
+/bin/bash -c rclone config $rclone_options

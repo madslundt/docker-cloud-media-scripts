@@ -1,0 +1,3 @@
+#!/bin/sh
+
+bash -c mount.script &>> ./log/mount.log

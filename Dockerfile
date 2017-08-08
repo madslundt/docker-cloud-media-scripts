@@ -1,11 +1,14 @@
-# Pull base image.
+####################
+# BASE IMAGE
+####################
 FROM ubuntu:16.04
 
 
-
+####################
 # INSTALLATIONS
+####################
 RUN apt-get update && apt-get install -y \
-    curl
+    curl \
     unionfs-fuse \
     bc \
     screen \
@@ -13,17 +16,17 @@ RUN apt-get update && apt-get install -y \
     fuse \
     wget
 
-# Install MongoDB.
+# MongoDB
 RUN \
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' > /etc/apt/sources.list.d/mongodb.list && \
-  apt-get update && \
-  apt-get install -y mongodb-org && \
-  rm -rf /var/lib/apt/lists/*
+   apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
+   echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list && \
+   apt-get update && \
+   apt-get install -y mongodb-org
 
 
-
+####################
 # ENVIRONMENTS
+####################
 # Rclone
 ENV BUFFER_SIZE "500M"
 ENV MAX_READ_AHEAD "30G"
@@ -44,48 +47,36 @@ ENV DATE_FORMAT "+%F@%T"
 
 # Local files removal
 ENV REMOVE_LOCAL_FILES_BASED_ON "space"
-ENV REMOVE_LOCAL_FILES_AFTER_DAYS "60"
 ENV REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB "2500"
 ENV FREEUP_ATLEAST_GB "1000"
+ENV REMOVE_LOCAL_FILES_AFTER_DAYS "60"
 
 
-COPY /setup/* /usr/local/bin/
+####################
+# SCRIPTS
+####################
+COPY setup/* /usr/local/bin/
 
-
-COPY /install.sh /
+COPY install.sh /
 RUN sh /install.sh
 
-
-# SCRIPTS
-COPY /scripts/* /usr/local/bin/
-
-COPY /plexdrive /
+COPY scripts/* /usr/local/bin/
 
 
-
+####################
 # VOLUMES
+####################
 # Define mountable directories.
-VOLUME [
-  "/data/db",
-  "/config",
-  "/cloud-encrypt",
-  "/cloud-decrypt",
-  "/local-decrypt",
-  "/local-media",
-  "/chunks",
-  "/logs"
-]
+VOLUME /data/db /config /cloud-encrypt /cloud-decrypt /local-decrypt /local-media /chunks /log
 
 
-
+####################
 # WORKING DIRECTORY
-# Define working directory.
+####################
 WORKDIR /data
 
 
+####################
 # COMMANDS
-# Define default command.
-CMD [
-  "mongod",
-  "mount.remote"
-]
+####################
+CMD ["mongod", "/bin/bash -c mount"]

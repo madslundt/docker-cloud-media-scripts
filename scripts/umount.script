@@ -6,13 +6,7 @@
 ###############################################################################
 # shellcheck source=config
 
-
-cloud_encrypt_dir="/cloud-encrypt"
-cloud_decrypt_dir="/cloud-decrypt"
-
-local_media_dir="/local-media"
-
-
+. "/usr/local/bin/config"
 ###############################################################################
 # FUNCTIONS
 ###############################################################################

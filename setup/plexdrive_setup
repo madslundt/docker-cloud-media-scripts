@@ -1,6 +1,5 @@
 #!/bin/sh
 
-mongo="--mongo-database=plexdrive --mongo-host=localhost --mongo-user=admin --mongo-password=plexdrive"
-plexdrive_options="--temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size$(printenv CLEAR_CHUNK_MAX_SIZE) --chunk-size=$(printenv CHUNK_SIZE)"
+. "/usr/local/bin/variables"
 
-plexdrive --config="/config" $mongo $plexdrive_options "${cloud_encrypt_dir}"
+/bin/bash -c plexdrive $mongo $plexdrive_options "${cloud_encrypt_dir}"

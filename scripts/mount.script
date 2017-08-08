@@ -6,14 +6,7 @@
 ###############################################################################
 # shellcheck source=config
 
-cloud_encrypt_dir="/cloud-encrypt"
-cloud_decrypt_dir="/cloud-decrypt"
-
-local_decrypt_dir="/local-decrypt"
-local_media_dir="/local-media"
-
-plexdrive_temp_dir="/chunks"
-
+. "/usr/local/bin/config"
 ###############################################################################
 # FUNCTIONS
 ###############################################################################
@@ -28,13 +21,10 @@ mount_gdrive () {
 		mkdir -p "${plexdrive_temp_dir}"
 	fi
 
-	mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
-	plexdrive_options="--temp=${plexdrive_temp_dir} -o allow_other --clear-chunk-max-size$(printenv CLEAR_CHUNK_MAX_SIZE) --chunk-size=$(printenv CHUNK_SIZE)"
-
 	# Mount GD if not already mounted.
 	if ! mountpoint -q "$cloud_encrypt_dir" ; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting Google Drive mountpoint: ${cloud_encrypt_dir}"
-		screen -dmS plexdrive plexdrive --config="/config" $mongo $plexdrive_options "${cloud_encrypt_dir}"
+		/bin/bash -c screen -dmS plexdrive /bin/bash -c plexdrive $mongo $plexdrive_options "${cloud_encrypt_dir}"
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Google Drive mountpoint: ${cloud_encrypt_dir} already mounted."
 	fi
@@ -46,11 +36,9 @@ mount_local_media () {
 		mkdir -p "${cloud_decrypt_dir}"
 	fi
 
-	rclone_options="--read-only --allow-non-empty --allow-other --buffer-size $(printenv BUFFER_SIZE) --max-read-ahead $(printenv MAX_READ_AHEAD) --checkers $(printenv CHECKERS)"
-
 	if ! mountpoint -q "$cloud_decrypt_dir"; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
-		rclone mount --config="/config/rclone.conf" $rclone_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" >/dev/null 2>&1
+		/bin/bash -c rclone mount $rclone_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" >/dev/null 2>&1
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Decrypted Google Drive mountpoint: ${cloud_decrypt_dir} already mounted."
 	fi
@@ -62,6 +50,10 @@ mount_union () {
 		mkdir -p "${local_media_dir}"
 	fi
 
+	if [ ! -d "${local_decrypt_dir}" ]; then
+		mkdir -p "${local_decrypt_dir}"
+	fi
+
 
 	# Mount plex media directory if not already mounted.
 	if ! mountpoint -q "${local_media_dir}"; then
@@ -69,7 +61,7 @@ mount_union () {
 
 		ufs_mounts="${local_decrypt_dir}=RW:${cloud_decrypt_dir}=RO"
 
-		unionfs $ufs_options "${ufs_mounts}" "${local_media_dir}"
+		/bin/bash -c unionfs $ufs_options "${ufs_mounts}" "${local_media_dir}"
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Plex library mountpoint: ${local_media_dir} already mounted."
 	fi
@@ -77,15 +69,6 @@ mount_union () {
 
 ###############################################################################
 
-
-if ! $(rclone listremotes --config="/config/rclone.conf" | grep $(printenv RCLONE_LOCAL_ENDPOINT)); then
-	echo "$(printenv RCLONE_LOCAL_ENDPOINT) endpoint has not been created within rclone"
-	exit 02
-elif ! $(rclone listremotes --config="/config/rclone.conf" | grep $(printenv RCLONE_CLOUD_ENDPOINT)); then
-	echo "$(printenv RCLONE_CLOUD_ENDPOINT) endpoint has not been created within rclone"
-	exit 02
-else
-	mount_gdrive
-	mount_local_media
-	mount_union
-fi
+mount_gdrive
+mount_local_media
+mount_union
