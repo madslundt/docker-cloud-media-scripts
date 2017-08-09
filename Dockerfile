@@ -76,9 +76,9 @@ VOLUME /data/db /config /cloud-encrypt /cloud-decrypt /local-decrypt /local-medi
 ####################
 WORKDIR /data
 
+RUN mount &
+
 ####################
 # COMMANDS
 ####################
 CMD ["mongod"]
-
-RUN mount &
