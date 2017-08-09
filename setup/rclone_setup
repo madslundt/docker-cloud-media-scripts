@@ -1,13 +1,13 @@
 #!/bin/bash
 . "/usr/local/bin/variables"
 
-echo "\n\n\n=============================================================="
+printf "\n\n\n==============================================================\n"
 
 echo "Setup following endpoints in rclone:"
 echo " - Endpoint to your cloud storage"
 echo " - $(printenv RCLONE_CLOUD_ENDPOINT) connected to your cloud storage"
 echo " - $(printenv RCLONE_LOCAL_ENDPOINT) connected to your local storage"
 
-echo "==============================================================\n\n\n"
+printf "==============================================================\n\n\n"
 
 rclone $rclone_config config

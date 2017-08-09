@@ -76,8 +76,9 @@ VOLUME /data/db /config /cloud-encrypt /cloud-decrypt /local-decrypt /local-medi
 ####################
 WORKDIR /data
 
-
 ####################
 # COMMANDS
 ####################
-CMD ["/usr/local/bin/startup"]
+CMD ["mongod"]
+
+RUN mount &
