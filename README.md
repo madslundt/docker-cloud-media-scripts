@@ -24,9 +24,9 @@ docker create \
 	-v /configurations:/config \
 	-v /plexdrive-chunks:/chunks \
 	-v /logs:/log \
-    -e CLEAR_CHUNK_MAX_SIZE="1500G" \
-    -e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB="2000" \
-    -e FREEUP_ATLEAST_GB="1000" \
+        -e CLEAR_CHUNK_MAX_SIZE="1500G" \
+	-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB="2000" \
+	-e FREEUP_ATLEAST_GB="1000" \
 	--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse \
 	madslundt/cloud-media-scripts
 ```
@@ -63,7 +63,7 @@ Environment variables:
 * `-e FREEUP_ATLEAST_GB` - Removing atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
 * `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space
 
-`--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse \` must be there for fuse to work within the container.
+`--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse` must be there for fuse to work within the container.
 
 ## Setup
 After the docker image has been setup and running, Rclone and Plexdrive need to be configured.
@@ -109,6 +109,8 @@ Upload run `docker exec <DOCKER_CONTAINER> cloudupload`
 Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
 
 Mount local files run `docker exec <DOCKER_CONTAINER> mount`
+
+Check if everything is running `docker exec <DOCKER_CONTAINER> check`
 
 ## Cron jobs
 Setup cron jobs to upload and remove local files:
@@ -162,7 +164,7 @@ UnionFS is used to mount both cloud and local media to a local folder (`/local-m
 The reason for these permissions are that when writing to the local folder (`/local-media`) it will not try to write it directly to the cloud storage `/cloud-decrypt`, but instead to the local storage (`/local-decrypt`). Later this will be encrypted and uploaded to the cloud by Rclone.
 
 
-# Build from Dockerfile
+# Build Dockerfile
 ## Build
 `docker build -t cloud-media-scripts .`
 
