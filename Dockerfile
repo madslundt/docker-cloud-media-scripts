@@ -80,4 +80,4 @@ WORKDIR /data
 ####################
 # COMMANDS
 ####################
-CMD mount && mongod
+CMD init && mongod
