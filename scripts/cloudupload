@@ -1,5 +1,4 @@
 #!/bin/bash
-
 . "/usr/local/bin/variables"
 
-cloudupload.script &>> "${log_dir}/cloudupload.log"
+cloudupload.script 2>&1 | tee "${log_dir}/cloudupload.log"

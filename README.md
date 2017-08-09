@@ -81,7 +81,7 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 	- Open the url in your browser and enter the verification code
  - Encryption and decryption for your cloud storage.
 	- Create new remote [Press N]
-	- Give it thye same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without colon : (default gd-crypt)
+	- Give it the same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without colon : (default gd-crypt)
 	- Choose Encrypt/Decrypt a remote [Press 5]
 	- Enter the name of the remote created in cloud-storage appended  with a colon (:) and the subfolder on your cloud. Example **gd:/Media** or just **gd:** if you have your files in root.
 	- Choose how to encrypt filenames. I prefer option 2 Encrypt the filenames
@@ -89,7 +89,7 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 	- Choose to enter pass phrase for the salt or leave it blank. I prefer to enter my own.
  - Encryption and decryption for your local storage.
 	- Create new remote [Press N]
-	- Give it thye same name as specified in the environment variable `RCLONE_LOCAL_ENDPOINT` but without colon : (default local-crypt)
+	- Give it the same name as specified in the environment variable `RCLONE_LOCAL_ENDPOINT` but without colon : (default local-crypt)
 	- Choose Encrypt/Decrypt a remote [Press 5]
 	- Enter the encrypted folder: /cloud-encrypt. If you are using subdirectory append it to it. Example /cloud-encrypt/Media
 	- Choose the same filename encrypted as you did with the cloud storage.
