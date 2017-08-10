@@ -6,7 +6,7 @@ mongod --fork --logpath "${log_dir}/mongod.log"
 echo "MongoDB started"
 
 echo "Mounting..."
-mount.script
+mount
 echo "Mounted"
 
 while /bin/true; do
