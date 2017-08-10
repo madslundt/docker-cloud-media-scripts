@@ -37,17 +37,20 @@ docker create \
 ## Parameters
 The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side.
 For example with a volume `-v external:internal` - what this shows is the volume mapping from internal to external of the container.
-Example `-v /media:/local-media` would expose directory **/local-media** from inside the container to be accessible from the host's directory **/media**
+Example `-v /media:/local-media` would expose directory **/local-media** from inside the container to be accessible from the host's directory **/media**.
+
+OBS: Some of the volumes need to have **shared** appended to it for it to work. This is needed to have the files visible for the host.
+Example `-v /media:/local-media:shared`.
 
 Volumes:
-* `-v /local-media` - Union of all files stored on cloud and local
-* `-v /local-decrypt` - Local files stored on disk
+* `-v /local-media` - Union of all files stored on cloud and local - Append **:shared**
+* `-v /local-decrypt` - Local files stored on disk - Append **:shared**
 * `-v /config` - Rclone and plexdrive configurations
 * `-v /chunks` - Plexdrive cache chunks
 * `-v /data/db` - MongoDB database
 * `-v /log` - Log files from mount, cloudupload and rmlocal
-* `-v /cloud-encrypt` - Cloud files encrypted synced with Plexdrive
-* `-v /cloud-decrypt` - Cloud files decrypted with Rclone
+* `-v /cloud-encrypt` - Cloud files encrypted synced with Plexdrive - Append **:shared**
+* `-v /cloud-decrypt` - Cloud files decrypted with Rclone - Append **:shared**
 
 Environment variables:
 * `-e BUFFER_SIZE` - Rclone: Buffer size when copying files (default **500M**)
