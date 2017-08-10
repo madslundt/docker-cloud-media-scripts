@@ -39,8 +39,10 @@ The parameters are split into two halves, separated by a colon, the left hand si
 For example with a volume `-v external:internal` - what this shows is the volume mapping from internal to external of the container.
 Example `-v /media:/local-media` would expose directory **/local-media** from inside the container to be accessible from the host's directory **/media**.
 
-OBS: Some of the volumes need to have **shared** appended to it for it to work. This is needed to have the files visible for the host.
+OBS: Some of the volumes need to have **:shared** appended to it for it to work. This is needed to have the files visible for the host.
 Example `-v /media:/local-media:shared`.
+
+**:shared** is also needed on if you mount these folders to your other Docker containers.
 
 Volumes:
 * `-v /local-media` - Union of all files stored on cloud and local - Append **:shared**
