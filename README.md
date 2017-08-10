@@ -2,7 +2,7 @@ Getting started
 ===============
 ## Usage
 
-Default settings use ~100 GB for local media, remove atleast 80 GB and Plexdrive chunks and cache are removed after 24 hours.
+Default settings use ~100GB for local media, remove atleast 80 GB and Plexdrive chunks and cache are removed after 24 hours:
 ```
 docker create \
 	--name cloud-media-scripts \
