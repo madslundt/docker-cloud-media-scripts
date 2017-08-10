@@ -17,3 +17,7 @@ fi
 mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
 
 log_dir="/log"
+
+if [ ! -d "${log_dir}" ]; then
+	mkdir -p "${log_dir}"
+fi

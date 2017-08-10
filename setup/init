@@ -1,4 +1,14 @@
 #!/bin/bash
+. "/usr/local/bin/variables"
 
-sleep 10
-mount
+echo "Starting MongoDB"
+mongod --fork --logpath "${log_dir}/mongod.log"
+echo "MongoDB started"
+
+echo "Mounting..."
+mount.script
+echo "Mounted"
+
+while /bin/true; do
+  sleep 60
+done

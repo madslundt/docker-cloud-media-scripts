@@ -6,7 +6,7 @@
 ###############################################################################
 # shellcheck source=config
 
-. "/usr/local/bin/config"
+. "/usr/local/bin/variables"
 ###############################################################################
 # FUNCTIONS
 ###############################################################################
@@ -71,9 +71,8 @@ mount_union () {
 
 if pidof -o %PPID -x "$(basename "$0")"; then
 	echo "[ $(date $(printenv DATE_FORMAT)) ] Mount already in progress. Aborting."
-	exit 3
+else
+	mount_gdrive
+	mount_local_media
+	mount_union
 fi
-
-mount_gdrive
-mount_local_media
-mount_union

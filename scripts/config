@@ -1,9 +1,6 @@
 #!/bin/bash
 . "/usr/local/bin/variables"
 
-if [ ! -d "${log_dir}" ]; then
-	mkdir -p "${log_dir}"
-fi
 
 if [[ ! "$(printenv RCLONE_LOCAL_ENDPOINT)" == *: ]]; then
 	printf "\n\n"

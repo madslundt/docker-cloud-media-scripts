@@ -4,7 +4,7 @@
 ###############################################################################
 # shellcheck source=config
 
-. "/usr/local/bin/config"
+. "/usr/local/bin/variables"
 ##############################################################################
 
 # If script is already running; abort.
