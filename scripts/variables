@@ -16,6 +16,8 @@ if [ -n $(printenv CLEAR_CHUNK_MAX_SIZE) ]; then
 fi
 mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
 
+ufs_options="-o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
+
 log_dir="/log"
 
 if [ ! -d "${log_dir}" ]; then
