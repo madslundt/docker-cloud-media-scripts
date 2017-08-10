@@ -17,7 +17,7 @@ docker create \
 
 If you have more space you can increase `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB`, `FREEUP_ATLEAST_GB` and either increase `CLEAR_CHUNK_AGE` or add `CLEAR_CHUNK_MAX_SIZE`.
 
-Example of having `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` set to 2.5 TB, `FREEUP_ATLEAST_GB` to 1 TB and `CLEAR_CHUNK_MAX_SIZE` to 1.5 TB:
+Example of having `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` set to 2TB, `FREEUP_ATLEAST_GB` to 1TB and `CLEAR_CHUNK_MAX_SIZE` to 1TB:
 ```
 docker create \
 	--name cloud-media-scripts \
@@ -26,7 +26,7 @@ docker create \
 	-v /configurations:/config \
 	-v /mnt/external/plexdrive:/chunks \
 	-v /logs:/log \
-	-e CLEAR_CHUNK_MAX_SIZE="1500G" \
+	-e CLEAR_CHUNK_MAX_SIZE="1000G" \
 	-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB="2000" \
 	-e FREEUP_ATLEAST_GB="1000" \
 	--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse \
