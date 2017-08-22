@@ -7,7 +7,8 @@ local_decrypt_dir="/local-decrypt"
 local_media_dir="/local-media"
 
 rclone_config="--config=/config/rclone.conf"
-rclone_options="${rclone_config} --read-only --allow-non-empty --allow-other --buffer-size $(printenv BUFFER_SIZE) --max-read-ahead $(printenv MAX_READ_AHEAD) --checkers $(printenv CHECKERS)"
+rclone_options="${rclone_config} --buffer-size $(printenv BUFFER_SIZE) --checkers $(printenv CHECKERS)"
+rclone_mount_options="${rclone_options} --read-only --allow-non-empty --allow-other --max-read-ahead $(printenv MAX_READ_AHEAD)"
 
 plexdrive_temp_dir="/chunks"
 plexdrive_options="--config=/config --temp=${plexdrive_temp_dir} -o allow_other --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE)"

@@ -38,7 +38,7 @@ mount_local_media () {
 
 	if [ $(ps -ef | grep "rclone" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
-		rclone mount $rclone_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" &
+		rclone mount $rclone_mount_options "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" &
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Decrypted Google Drive mountpoint: ${cloud_decrypt_dir} already mounted."
 	fi
