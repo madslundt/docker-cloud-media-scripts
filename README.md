@@ -6,8 +6,8 @@ Default settings use ~100GB for local media, remove atleast 80 GB and Plexdrive 
 ```
 docker create \
 	--name cloud-media-scripts \
-	-v /media:/local-media \
-	-v /mnt/external/media:/local-decrypt \
+	-v /media:/local-media:shared \
+	-v /mnt/external/media:/local-decrypt:shared \
 	-v /configurations:/config \
 	-v /mnt/external/plexdrive:/chunks \
 	-v /logs:/log \
@@ -21,8 +21,8 @@ Example of having `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` set to 2TB, `FREEUP
 ```
 docker create \
 	--name cloud-media-scripts \
-	-v /media:/local-media \
-	-v /mnt/external/media:/local-decrypt \
+	-v /media:/local-media:shared \
+	-v /mnt/external/media:/local-decrypt:shared \
 	-v /configurations:/config \
 	-v /mnt/external/plexdrive:/chunks \
 	-v /logs:/log \
@@ -118,6 +118,9 @@ Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
 Mount local files run `docker exec <DOCKER_CONTAINER> mount`
 
 Check if everything is running `docker exec <DOCKER_CONTAINER> check`
+
+`cloudupload`, `rmlocal`, `mount` can be ran with arguments. All arguments are passed to rclone.
+For example it is possible to run `docker exec <DOCKER_CONTAINER> cloudupload -v` to get verbose on the rclone operations in cloudupload (in this case rclone copy).
 
 ## Cron jobs
 Setup cron jobs to upload and remove local files:
