@@ -42,7 +42,7 @@ rm_time () {
 rm_space () {
 	maxSize=$(($REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB * 1000 * 1000 * 1000))
 	currentSize="$(du -sb "$local_decrypt_dir" | awk '{print $1}')"
-	if [ "$maxSize" -gt "$currentSize" ]]; then
+	if [ "$maxSize" -gt "$currentSize" ]; then
 			echo "Current size of $(($currentSize / 1000 / 1000 / 1000)) GB has not exceeded $REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB GB"
 			exit 02
 	fi
