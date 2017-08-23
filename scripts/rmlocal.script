@@ -48,7 +48,7 @@ rm_space () {
 	fi
 
 	addedSpace=0
-	freeup=$(($freeup_atleast * 1000 * 1000 * 1000))
+	freeup=$(($FREEUP_ATLEAST_GB * 1000 * 1000 * 1000))
 
 	find "${local_decrypt_dir}" -type f -exec stat -c "%x %n" {} \; | sort | awk '{$1=$2=$3=""; print $0}' |
 		while read -r n; do
