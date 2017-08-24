@@ -52,7 +52,7 @@ rm_space () {
 
 	find "${local_decrypt_dir}" -type f -exec stat -c "%x %n" {} \; | sort | awk '{$1=$2=$3=""; print $0}' |
 		while read -r n; do
-			if [ "$addedSpace" -gt "$freeup" ]]; then
+			if [ "$addedSpace" -gt "$freeup" ]; then
 					spaceInGb=$(($addedSpace / 1000 / 1000 / 1000))
 					spaceLeft=$(($(du -sb "$local_decrypt_dir" | awk '{print $1}') / 1000 / 1000 / 1000))
 					echo "[ $(date $(printenv DATE_FORMAT)) ] Removed ${spaceInGb} GB. Media in total ${spaceLeft} GB."
