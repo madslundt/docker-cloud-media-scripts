@@ -29,6 +29,9 @@ RUN apt-get update && apt-get install -y \
 ####################
 # ENVIRONMENT VARIABLES
 ####################
+# Encryption
+ENV ENCRYPT_MEDIA "1"
+
 # Rclone
 ENV BUFFER_SIZE "500M"
 ENV MAX_READ_AHEAD "30G"

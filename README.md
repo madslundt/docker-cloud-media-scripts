@@ -55,6 +55,7 @@ Volumes:
 * `-v /cloud-decrypt` - Cloud files decrypted with Rclone - Append **:shared**
 
 Environment variables:
+* `-e ENCRYPT_MEDIA` - If media is or should be encrypted. 0 means no encryption and 1 means encryption (default **1**)
 * `-e BUFFER_SIZE` - Rclone: Buffer size when copying files (default **500M**)
 * `-e MAX_READ_AHEAD` - Rclone: The number of bytes that can be prefetched for sequential reads (default **30G**)
 * `-e CHECKERS` - Rclone: Number of checkers to run in parallel (default **16**)
