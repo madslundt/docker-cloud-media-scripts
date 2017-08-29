@@ -147,10 +147,12 @@ Cloud is mounted to a local folder (`/cloud-encrypt`). This folder is then decry
 A local folder (`/local-decrypt`) is created to contain local media.
 The local folder (`/local-decrypt`) and cloud folder (`/cloud-decrypt`) is then mounted to a third folder (`/local-media`) with certain permissions - local folder with Read/Write permissions and cloud folder with Read-only permissions.
 
-Everytime new media is retrieved it needs be added to `/local-media` or directly to `/local-decrypt`.
-Keep in mind that if it is written and read from `/local-decrypt` it will sooner or later be removed from this folder depending on the `REMOVE_LOCAL_FILES_BASED_ON` setting. This is only removed from `/local-decrypt` and will still appear in `/local-media` because it will still be accessable from the cloud.
+Everytime new media is retrieved it should be added to `/local-media`.
+Sooner or later media is going to be removed from `/local-decrypt` depending on the `REMOVE_LOCAL_FILES_BASED_ON` setting. Media is only removed from `/local-decrypt` and still appears in `/local-media` because it would still be accessable from the cloud.
 
-If `REMOVE_LOCAL_FILES_BASED_ON` is set to **space** it will only remove content, starting from the oldest accessed file and if the file is uploaded to the cloud, if local media size has exceeded `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` and will only free up atleast `FREEUP_ATLEAST_GB`. If **time** is set it will only remove files older than `REMOVE_LOCAL_FILES_AFTER_DAYS` only if they are uploaded to the cloud.
+If `REMOVE_LOCAL_FILES_BASED_ON` is set to **space** it will only remove content (if local media size has exceeded `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB`) starting from the oldest accessed file and will only free up atleast `FREEUP_ATLEAST_GB`. If **time** is set it will only remove files older than `REMOVE_LOCAL_FILES_AFTER_DAYS`.
+
+*Media is always uploaded to cloud before removing it locally.*
 
 ![UML diagram](uml.png)
 
