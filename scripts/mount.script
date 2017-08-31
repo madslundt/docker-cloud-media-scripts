@@ -43,6 +43,12 @@ mount_local_media () {
 		mkdir -p "${cloud_decrypt_dir}"
 	fi
 
+	while [ -z "$(ls -A ${cloud_encrypt_dir})" ]
+	do
+		echo "Waiting for mount ${cloud_encrypt_dir} ..."
+		sleep 30
+	done
+
 	if [ $(ps -ef | grep "rclone" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
 		rclone mount $rclone_mount_options "$@" "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" &
@@ -60,6 +66,12 @@ mount_union () {
 	if [ ! -d "${local_decrypt_dir}" ]; then
 		mkdir -p "${local_decrypt_dir}"
 	fi
+
+	while [ -z "$(ls -A ${cloud_decrypt_dir})" ]
+	do
+		echo "Waiting for mount ${cloud_decrypt_dir} ..."
+		sleep 30
+	done
 
 
 	# Mount plex media directory if not already mounted.
