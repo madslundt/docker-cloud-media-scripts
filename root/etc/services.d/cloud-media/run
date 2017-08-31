@@ -1,0 +1,22 @@
+#!/usr/bin/with-contenv sh
+. "/usr/bin/variables"
+
+umask 022
+
+mongodb_command="mongod --fork --logpath ${log_dir}/mongod.log"
+mount_command="mount"
+
+mongodbPID=`ps cax | grep "mongod" | grep -o '^[ ]*[0-9]*'`
+plexdrivePID=`ps cax | grep "plexdrive" | grep -o '^[ ]*[0-9]*'`
+rclonePID=`ps cax | grep "rclone" | grep -o '^[ ]*[0-9]*'`
+unionfsPID=`ps cax | grep "unionfs" | grep -o '^[ ]*[0-9]*'`
+
+if [ -z "$mongodbPID" ]; then
+    echo "Executing ${mongodb_command}"
+    exec s6-setuidgid abc $mongodb_command
+fi
+
+if [ -z "$plexdrivePID" ] || ([ "$(printenv ENCRYPT_MEDIA)" -ne "0" ] && [ -z "$rclonePID" ]) || [ -z "$unionfsPID" ]; then
+    echo "Executing ${mount_command}"
+    exec s6-setuidgid abc $mount_command
+fi
