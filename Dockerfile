@@ -18,10 +18,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     wget
 
-RUN sed -i 's/#user_allow_other/user_allow_other/' /etc/fuse.conf
-
 RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates && apt-get install -y openssl
-
+RUN sed -i 's/#user_allow_other/user_allow_other/' /etc/fuse.conf
 RUN chmod 777 /var/run/screen
 
 # MongoDB 3.4
@@ -30,7 +28,6 @@ RUN \
    echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list && \
    apt-get update && \
    apt-get install -y mongodb-org
-
 
 # S6 overlay
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2

@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv sh
+. "/usr/bin/variables"
+
+umask 022
+
+mount_command="mount"
+
+sleep 5
+echo "Executing ${mount_command}"
+exec $mount_command

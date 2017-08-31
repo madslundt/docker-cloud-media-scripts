@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv sh
+. "/usr/bin/variables"
+
+umask 022
+
+mongodb_command="mongod --logpath ${log_dir}/mongod.log"
+
+echo "Executing ${mongodb_command}"
+exec s6-setuidgid abc $mongodb_command

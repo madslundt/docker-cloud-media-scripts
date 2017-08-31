@@ -20,8 +20,11 @@ chmod -R 777 \
     $log_dir \
     /data/db
 
+chmod a+r /etc/fuse.conf
+
 chown -R abc:abc \
     /config \
+    /data/db \
     /usr/bin/* \
     $cloud_encrypt_dir \
     $cloud_decrypt_dir \
