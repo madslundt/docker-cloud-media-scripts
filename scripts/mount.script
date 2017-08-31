@@ -6,7 +6,7 @@
 ###############################################################################
 # shellcheck source=config
 
-. "/usr/local/bin/variables"
+. "/usr/bin/config"
 ###############################################################################
 # FUNCTIONS
 ###############################################################################
@@ -36,6 +36,8 @@ mount_gdrive () {
 }
 
 mount_local_media () {
+	check_rclone_local
+
 	# Make sure decrypted GD directory exists.
 	if [ ! -d "${cloud_decrypt_dir}" ]; then
 		mkdir -p "${cloud_decrypt_dir}"

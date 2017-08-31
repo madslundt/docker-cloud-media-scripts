@@ -10,11 +10,11 @@ plexdrive_url="https://github.com/dweidenfeld/plexdrive/releases/download/4.0.0/
 wget "$rclone_url"
 unzip "$rclone_zip"
 chmod a+x "${rclone_release}/rclone"
-cp -rf "${rclone_release}/rclone" "/usr/local/bin/rclone"
+cp -rf "${rclone_release}/rclone" "/usr/bin/rclone"
 rm -rf "$rclone_zip"
 rm -rf "$rclone_release"
 # Plexdrive
 wget "$plexdrive_url"
 chmod a+x "$plexdrive_bin"
-cp -rf "$plexdrive_bin" "/usr/local/bin/plexdrive"
+cp -rf "$plexdrive_bin" "/usr/bin/plexdrive"
 rm -rf "$plexdrive_bin"

@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv sh
+. "/usr/bin/variables"
+
+# unmount fuse
+fusermount -uz "${cloud_encrypt_dir}"
+fusermount -uz "${cloud_decrypt_dir}"
+fusermount -uz "${local_decrypt_dir}"
+fusermount -uz "${local_media_dir}"

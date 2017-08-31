@@ -1,16 +1,23 @@
 #!/bin/bash
-. "/usr/local/bin/config"
+. "/usr/bin/config"
 
 all_good=1
+
+check_rclone_cloud
+check_rclone_local
+
+
 
 if [ $(ps -ef | grep "plexdrive" | grep -v "grep" | wc -l) == "0" ]; then
     printf "\n\nPlexdrive is not running\n\n"
     all_good=0
 fi
 
-if [ $(ps -ef | grep "rclone" | grep -v "grep" | wc -l) == "0" ]; then
-    printf "\n\nRclone is not running\n\n"
-    all_good=0
+if [ "$(printenv ENCRYPT_MEDIA)" != "0" ]; then
+    if [ $(ps -ef | grep "rclone" | grep -v "grep" | wc -l) == "0" ]; then
+        printf "\n\nRclone is not running\n\n"
+        all_good=0
+    fi
 fi
 
 if [ $(ps -ef | grep "unionfs" | grep -v "grep" | wc -l) == "0" ]; then

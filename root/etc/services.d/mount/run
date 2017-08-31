@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv sh
+. "/usr/bin/variables"
+
+umask 022
+
+mount_command="mount"
+
+echo "Executing ${mongo_command}"
+mongod --fork --logpath ${log_dir}/mongod.log
+
+echo "Executing ${mount_command}"
+exec s6-setuidgid abc $mount_command
+
+while /bin/true; do
+    sleep 60
+done

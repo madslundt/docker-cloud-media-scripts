@@ -1,5 +1,5 @@
 #!/bin/bash
-. "/usr/local/bin/variables"
+. "/usr/bin/variables"
 
 printf "\n\n\n==============================================================\n"
 

@@ -4,7 +4,7 @@
 ###############################################################################
 # shellcheck source=config
 
-. "/usr/local/bin/variables"
+. "/usr/bin/variables"
 ##############################################################################
 
 rm_time () {
@@ -98,6 +98,8 @@ if pidof -o %PPID -x "$(basename "$0")"; then
 	echo "[ $(date $(printenv DATE_FORMAT)) ] Upload already in progress. Aborting."
 	exit 3
 fi
+
+check_rclone_cloud
 
 if [ "$REMOVE_LOCAL_FILES_BASED_ON" = "space" ]; then
 	rm_space

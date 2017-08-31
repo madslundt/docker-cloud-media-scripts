@@ -4,7 +4,7 @@
 ###############################################################################
 # shellcheck source=config
 
-. "/usr/local/bin/variables"
+. "/usr/bin/config"
 ##############################################################################
 
 # If script is already running; abort.
@@ -12,6 +12,9 @@ if pidof -o %PPID -x "$(basename "$0")"; then
 	echo "[ $(date $(printenv DATE_FORMAT)) ] Upload already in progress. Aborting."
 	exit 3
 fi
+
+check_rclone_cloud
+
 
 # Generate filelist and iterate through it...
 find "${local_decrypt_dir}" -type f |
