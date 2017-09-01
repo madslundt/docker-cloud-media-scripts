@@ -1,5 +1,8 @@
 #!/bin/bash
 
+_puid=$(printenv PUID)
+_pgid=$(printenv PGID)
+
 cloud_encrypt_dir="/cloud-encrypt"
 cloud_decrypt_dir="/cloud-decrypt"
 
@@ -8,17 +11,17 @@ local_media_dir="/local-media"
 
 rclone_config="--config=/config/rclone.conf"
 rclone_options="${rclone_config} --buffer-size $(printenv BUFFER_SIZE) --checkers $(printenv CHECKERS)"
-rclone_mount_options="${rclone_options} --read-only --allow-non-empty --allow-other --max-read-ahead $(printenv MAX_READ_AHEAD) --uid ${$(printenv PUID):-911} --gid ${$(printenv PGID):-911}"
+rclone_mount_options="${rclone_options} --read-only --allow-non-empty --allow-other --max-read-ahead $(printenv MAX_READ_AHEAD) --uid ${_puid:-911} --gid ${_pgid:-911}"
 
 plexdrive_temp_dir="/chunks"
-plexdrive_options="--config=/config --temp=${plexdrive_temp_dir} --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE) --uid=${$(printenv PUID):-911} --gid=${$(printenv PGID):-911} -o allow_other,read_only"
+plexdrive_options="--config=/config --temp=${plexdrive_temp_dir} --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE) --uid=${_puid:-911} --gid=${_pgid:-911} -o allow_other,read_only"
 if [ ! -z $(printenv CLEAR_CHUNK_MAX_SIZE) ]; then
     plexdrive_options="${plexdrive_options} --clear-chunk-max-size=$(printenv CLEAR_CHUNK_MAX_SIZE)"
 fi
 
 mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
 
-ufs_options="-o uid=${$(printenv PUID):-911} -o gid=${$(printenv PGID):-911} -o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
+ufs_options="-o uid=${_puid:-911} -o gid=${_pgid:-911} -o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
 
 log_dir="/log"
 
