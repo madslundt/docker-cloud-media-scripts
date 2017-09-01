@@ -43,6 +43,7 @@ mount_local_media () {
 		mkdir -p "${cloud_decrypt_dir}"
 	fi
 
+	sleep 5
 	while [ -z "$(ls -A ${cloud_encrypt_dir})" ]
 	do
 		echo "Waiting for mount ${cloud_encrypt_dir} ..."
@@ -67,6 +68,7 @@ mount_union () {
 		mkdir -p "${local_decrypt_dir}"
 	fi
 
+	sleep 5
 	while [ -z "$(ls -A ${cloud_decrypt_dir})" ]
 	do
 		echo "Waiting for mount ${cloud_decrypt_dir} ..."
