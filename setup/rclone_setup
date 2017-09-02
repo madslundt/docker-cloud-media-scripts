@@ -5,14 +5,20 @@ printf "\n\n\n==============================================================\n"
 
 printf "Setup following endpoints in rclone:\n\n"
 
+
 echo "- Endpoint to your cloud storage."
 printf "\t- Create new remote [Press N]\n"
+if [ "$(printenv ENCRYPT_MEDIA)" != "0" ]; then
 printf "\t- Give it a name example gd\n"
+else
+printf "\t- Enter Rclone cloud endpoint: $(echo -n $(printenv RCLONE_CLOUD_ENDPOINT) | head -c -1)\n"
+fi
 printf "\t- Choose Google Drive [Press 7]\n"
 printf "\t- If you have a client id paste it here or leave it blank\n"
 printf "\t- Choose headless machine [Press N]\n"
 printf "\t- Open the url in your browser and enter the verification code\n\n"
 
+if [ "$(printenv ENCRYPT_MEDIA)" != "0" ]; then
 echo "- Encryption and decryption for your cloud storage."
 printf "\t- Create new remote [Press N]\n"
 printf "\t- Enter Rclone cloud endpoint: $(echo -n $(printenv RCLONE_CLOUD_ENDPOINT) | head -c -1)\n"
@@ -30,6 +36,7 @@ printf "\t- Enter the encrypted folder: ${cloud_encrypt_dir}. If you are using s
 printf "\t- Choose the same filename encrypted as you did with the cloud storage.\n"
 printf "\t- Enter the same password as you did with the cloud storage.\n"
 printf "\t- Enter the same pass phrase as you did with the cloud storage.\n"
+fi
 
 printf "==============================================================\n\n\n"
 

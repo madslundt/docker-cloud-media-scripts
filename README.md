@@ -1,6 +1,4 @@
-Getting started
-===============
-## Usage
+# Usage
 
 Default settings use ~100GB for local media, remove atleast 80 GB and Plexdrive chunks and cache are removed after 24 hours:
 ```
@@ -34,7 +32,7 @@ docker create \
 ```
 
 
-## Parameters
+# Parameters
 The parameters are split into two halves, separated by a colon, the left hand side representing the host and the right the container side.
 For example with a volume `-v external:internal` - what this shows is the volume mapping from internal to external of the container.
 Example `-v /media:/local-media` would expose directory **/local-media** from inside the container to be accessible from the host's directory **/media**.
@@ -76,12 +74,13 @@ Environment variables:
 
 `--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse` must be there for fuse to work within the container.
 
-## Setup
+# Setup
 After the docker image has been setup and running, Rclone and Plexdrive need to be configured.
 
-### Rclone
+## Rclone
 Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 
+### With encryption
 3 remotes are needed:
  - Endpoint to your cloud storage.
 	- Create new remote [**Press N**]
@@ -107,26 +106,35 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 	- Enter the same password as you did with the cloud storage.
 	- Enter the same pass phrase as you did with the cloud storage.
 
+
+### Without encryption
+1 remote is needed:
+ - Endpoint to your cloud storage.
+	- Create new remote [**Press N**]
+	- Give it the same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without the colon (:). Example `gd:/Media` or just `gd:` if you have your files in root in the cloud.
+	- Choose Google Drive [**Press 7**]
+	- If you have a client id paste it here or leave it blank
+	- Choose headless machine [**Press N**]
+	- Open the url in your browser and enter the verification code
+
 Rclone documentation if needed [click here](https://rclone.org/docs/)
 
-### Plexdrive
+## Plexdrive
 Setup Plexdrive to the cloud. Run the command `docker exec -ti <DOCKER_CONTAINER> plexdrive_setup`
 
 Plexdrive documentation if needed [click here](https://github.com/dweidenfeld/plexdrive/tree/4.0.0)
 
-## Commands
-Upload run `docker exec <DOCKER_CONTAINER> cloudupload`
+# Commands
+Upload local files to cloud run: `docker exec <DOCKER_CONTAINER> cloudupload`
 
 Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
 
-Mount local files run `docker exec <DOCKER_CONTAINER> mount`
-
 Check if everything is running `docker exec <DOCKER_CONTAINER> check`
 
-`cloudupload`, `rmlocal`, `mount` can be ran with arguments. All arguments are passed to rclone.
-For example it is possible to run `docker exec <DOCKER_CONTAINER> cloudupload -v` to get verbose on the rclone operations in cloudupload (in this case rclone copy).
+`cloudupload` and `rmlocal` can be ran with arguments. All arguments are passed to rclone.
+For example it is possible to run `docker exec <DOCKER_CONTAINER> cloudupload -v` to get verbose on the rclone operations in cloudupload.
 
-## Cron jobs
+# Cron jobs
 Setup cron jobs to upload and remove local files:
  - `@daily docker exec <DOCKER_CONTAINER> cloudupload`
  - `@weekly docker exec <DOCKER_CONTAINER> rmlocal`
