@@ -111,7 +111,7 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 1 remote is needed:
  - Endpoint to your cloud storage.
 	- Create new remote [**Press N**]
-	- Give it the same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without the colon (:). Example `gd:/Media` or just `gd:` if you have your files in root in the cloud.
+	- Give it the same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without the colon (:)
 	- Choose Google Drive [**Press 7**]
 	- If you have a client id paste it here or leave it blank
 	- Choose headless machine [**Press N**]
