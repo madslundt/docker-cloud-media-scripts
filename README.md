@@ -49,7 +49,7 @@ Volumes:
 * `-v /chunks` - Plexdrive cache chunks
 * `-v /data/db` - MongoDB database
 * `-v /log` - Log files from mount, cloudupload and rmlocal
-* `-v /cloud-encrypt` - Cloud files encrypted synced with Plexdrive - Append **:shared**
+* `-v /cloud-encrypt` - Cloud files encrypted synced with Plexdrive. This is empty if `ENCRYPT_MEDIA` is 0. - Append **:shared**
 * `-v /cloud-decrypt` - Cloud files decrypted with Rclone - Append **:shared**
 
 Environment variables:
@@ -58,7 +58,7 @@ Environment variables:
 * `-e MAX_READ_AHEAD` - Rclone: The number of bytes that can be prefetched for sequential reads (default **30G**)
 * `-e CHECKERS` - Rclone: Number of checkers to run in parallel (default **16**)
 * `-e RCLONE_CLOUD_ENDPOINT` - Rclone: Cloud endpoint (default **gd-crypt:**)
-* `-e RCLONE_LOCAL_ENDPOINT` - Rclone: Local endpoint (default **local-crypt:**)
+* `-e RCLONE_LOCAL_ENDPOINT` - Rclone: Local endpoint (default **local-crypt:**) - this is ignored when `ENCRYPT_MEDIA` is 0.
 * `-e CHUNK_SIZE` - Plexdrive: The size of each chunk that is downloaded (default **10M**)
 * `-e CLEAR_CHUNK_MAX_SIZE` - Plexdrive: The maximum size of the temporary chunk directory (empty as default)
 * `-e CLEAR_CHUNK_AGE` - Plexdrive: The maximum age of a cached chunk file (default **24h**) - this is ignored if `CLEAR_CHUNK_MAX_SIZE` is set
@@ -81,7 +81,11 @@ After the docker image has been setup and running, Rclone and Plexdrive need to 
 Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 
 ### With encryption
-3 remotes are needed:
+3 remotes are needed when using encryption:
+1. First one is for the Google drive connection
+2. Second one is for the Google drive on-the-fly encryption/decryption
+3. Third and last one is for the local encryption/decryption
+
  - Endpoint to your cloud storage.
 	- Create new remote [**Press N**]
 	- Give it a name example gd
@@ -108,7 +112,7 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
 
 
 ### Without encryption
-1 remote is needed:
+1 remote is needed to connect rclone to Google drive:
  - Endpoint to your cloud storage.
 	- Create new remote [**Press N**]
 	- Give it the same name as specified in the environment variable `RCLONE_CLOUD_ENDPOINT` but without the colon (:)
@@ -146,24 +150,32 @@ Following services are used to sync, encrypt/decrypt and mount media:
  - Rclone
  - UnionFS
 
-This gives us a total of 5 directories:
+When using encryption this gives us a total of 5 directories:
  - /cloud-encrypt: Cloud data encrypted (Mounted with Plexdrive)
  - /cloud-decrypt: Cloud data decrypted (Mounted with Rclone)
- - /local-decrypt: Local data decrypted
+ - /local-decrypt: Local data decrypted that is yet to be uploaded to the cloud
+ - /chunks: Plexdrive temporary files and caching
+ - /local-media: Union of decrypted cloud data and local data (Mounted with Union-FS)
+ 
+When NOT using encryption this gives us a total of 4 directories:
+ - /cloud-decrypt: Cloud data decrypted (Mounted with Plexdrive)
+ - /local-decrypt: Local data decrypted that is yet to be uploaded to the cloud
  - /chunks: Plexdrive temporary files and caching
  - /local-media: Union of decrypted cloud data and local data (Mounted with Union-FS)
 
-Cloud is mounted to a local folder (`/cloud-encrypt`). This folder is then decrypted and mounted to a local folder (`/cloud-decrypt`).
 
-A local folder (`/local-decrypt`) is created to contain local media.
-The local folder (`/local-decrypt`) and cloud folder (`/cloud-decrypt`) is then mounted to a third folder (`/local-media`) with certain permissions - local folder with Read/Write permissions and cloud folder with Read-only permissions.
+All Cloud data is mounted to `/cloud-encrypt`. This folder is then decrypted and mounted to `/cloud-decrypt`. If `ENCRYPT_MEDIA` is turned off cloud data is mounted directly to `/cloud-decrypt`.
+d
+A local folder (`/local-decrypt`) containing local media that is yet to be uploaded to the cloud.
+`/local-decrypt` and `/cloud-decrypt` is then mounted to a third folder (`/local-media`) with certain permissions - `/local-decrypt` with Read/Write permissions and `/cloud-decrypt` with Read-only permission.
 
-Everytime new media is retrieved it should be added to `/local-media`.
-Sooner or later media is going to be removed from `/local-decrypt` depending on the `REMOVE_LOCAL_FILES_BASED_ON` setting. Media is only removed from `/local-decrypt` and still appears in `/local-media` because it would still be accessable from the cloud.
+Everytime new media is retrieved it should be added to `/local-media`. By adding files to `/local-media` it is added to `/local-decrypt` because of the Read/Write permissions. That is why a cronjob is needed to upload local files from `/local-decrypt`.
+
+By having a cronjob to rmlocal it will sooner or later move media from `/local-decrypt` depending on the `REMOVE_LOCAL_FILES_BASED_ON` setting. Media is only removed from `/local-decrypt` and still appears in `/local-media` because it is still be accessable from the cloud.
 
 If `REMOVE_LOCAL_FILES_BASED_ON` is set to **space** it will only remove content (if local media size has exceeded `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB`) starting from the oldest accessed file and will only free up atleast `FREEUP_ATLEAST_GB`. If **time** is set it will only remove files older than `REMOVE_LOCAL_FILES_AFTER_DAYS`.
 
-*Media is always uploaded to cloud before removing it locally.*
+*Media is never deleted locally before being uploaded successful to the cloud.*
 
 ![UML diagram](uml.png)
 
