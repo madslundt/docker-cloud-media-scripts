@@ -29,8 +29,8 @@ find "${local_decrypt_dir}" -type f |
 			(*.partial~) continue ;;
 			(*_HIDDEN~) continue ;;
 			(*.QTFS) continue ;;
-			(*.fuse*) continue ;;
-			(.DS_STORE) continue ;;
+			(*.unionfs-fuse*) continue ;;
+			(*.DS_STORE) continue ;;
 		esac
 
 		# If file is opened by another process, wait until it isn't.
