@@ -68,6 +68,7 @@ Environment variables:
 * `-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` - Remove local files when local storage exceeds this value in GB (default **100**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
 * `-e FREEUP_ATLEAST_GB` - Remove atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
 * `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space
+* `-e READ_ONLY` If Rclone and Plexdrive should be read only or not. 0 means writeable and 1 means read only (default **1**)
 * `-e PGID` Group id
 * `-e PUID` User id
 
@@ -156,7 +157,7 @@ When using encryption this gives us a total of 5 directories:
  - /local-decrypt: Local data decrypted that is yet to be uploaded to the cloud
  - /chunks: Plexdrive temporary files and caching
  - /local-media: Union of decrypted cloud data and local data (Mounted with Union-FS)
- 
+
 When NOT using encryption this gives us a total of 4 directories:
  - /cloud-decrypt: Cloud data decrypted (Mounted with Plexdrive)
  - /local-decrypt: Local data decrypted that is yet to be uploaded to the cloud
