@@ -208,3 +208,8 @@ The reason for these permissions are that when writing to the local folder (`/lo
 
 ## Test run
 `docker run --name cloud-media-scripts -d cloud-media-scripts`
+
+
+If you want to support the project or just buy me a beer I accept Paypal.
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/madslundt)
