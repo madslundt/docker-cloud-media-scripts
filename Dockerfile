@@ -49,7 +49,7 @@ RUN \
 # Encryption
 ENV ENCRYPT_MEDIA "1"
 
-ENV READONLY "1"
+ENV READ_ONLY "1"
 
 # Rclone
 ENV BUFFER_SIZE "500M"
