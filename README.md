@@ -213,4 +213,5 @@ The reason for these permissions are that when writing to the local folder (`/lo
 If you want to support the project or just buy me a beer I accept Paypal and bitcoins.
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/madslundt)
+
 BitCoin address: 18fXu7Ty9RB4prZCpD8CDD1AyhHaRS1ef3
