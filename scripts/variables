@@ -15,22 +15,20 @@ rclone_mount_options="${rclone_options} --allow-non-empty --allow-other --max-re
 
 plexdrive_temp_dir="/chunks"
 plexdrive_options="--config=/config --temp=${plexdrive_temp_dir} --chunk-size=$(printenv CHUNK_SIZE) --clear-chunk-age=$(printenv CLEAR_CHUNK_AGE) --uid=${_puid:-911} --gid=${_pgid:-911} -o allow_other"
-
-if [ "$(printenv READ_ONLY)" != "0" ]; then
-    plexdrive_options="$plexdrive_options -o read_only"
-    rclone_mount_options="$rclone_mount_options --read-only"
-fi
 if [ ! -z $(printenv CLEAR_CHUNK_MAX_SIZE) ]; then
     plexdrive_options="${plexdrive_options} --clear-chunk-max-size=$(printenv CLEAR_CHUNK_MAX_SIZE)"
 fi
 
+if [ "$(printenv READ_ONLY)" != "0" ]; then
+    rclone_mount_options="${rclone_mount_options} --read-only"
+    plexdrive_options="${plexdrive_options} -o read_only"
+fi
 
 mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
 
 ufs_options="-o uid=${_puid:-911} -o gid=${_pgid:-911} -o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
 
 log_dir="/log"
-
 if [ ! -d "${log_dir}" ]; then
 	mkdir -p "${log_dir}"
 fi
