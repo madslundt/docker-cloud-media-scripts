@@ -14,13 +14,11 @@ RUN apt-get update && apt-get install -y \
     fuse \
     unionfs-fuse \
     bc \
-    screen \
     unzip \
     wget
 
 RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates && apt-get install -y openssl
 RUN sed -i 's/#user_allow_other/user_allow_other/' /etc/fuse.conf
-RUN chmod 777 /var/run/screen
 
 # MongoDB 3.4
 RUN \

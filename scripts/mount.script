@@ -29,8 +29,7 @@ mount_gdrive () {
 	# Mount GD if not already mounted.
 	if [ $(ps -ef | grep "plexdrive" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting Google Drive mountpoint: ${cloud_dir}"
-		echo "screen -dmS plexdrive plexdrive $mongo $plexdrive_options ${cloud_dir}"
-		screen -dmS plexdrive plexdrive $mongo $plexdrive_options "${cloud_dir}"
+		plexdrive $mongo $plexdrive_options "${cloud_dir}" &
 	else
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Google Drive mountpoint: ${cloud_dir} already mounted."
 	fi
@@ -53,10 +52,9 @@ mount_local_media () {
 
 	if [ $(ps -ef | grep "rclone" | grep -v "grep" | wc -l) == "0" ]; then
 		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting decrypted Google Drive: ${cloud_decrypt_dir}"
-		echo "rclone mount $rclone_mount_options $@ $(printenv RCLONE_LOCAL_ENDPOINT) ${cloud_decrypt_dir}"
 		rclone mount $rclone_mount_options "$@" "$(printenv RCLONE_LOCAL_ENDPOINT)" "${cloud_decrypt_dir}" &
 	else
-		echo "[ $(date $(printenv DATE_FORMAT)) ] Decrypted Google Drive mountpoint: ${cloud_decrypt_dir} already mounted."
+		echo "[ $(date $(printenv DATE_FORMAT)) ] Decrypted mountpoint: ${cloud_decrypt_dir} already mounted."
 	fi
 }
 
@@ -80,15 +78,12 @@ mount_union () {
 
 	# Mount plex media directory if not already mounted.
 	if [ $(ps -ef | grep "unionfs" | grep -v "grep" | wc -l) == "0" ]; then
-		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting Plex library mountpoint: ${local_media_dir}"
-
 		ufs_mounts="${local_decrypt_dir}=RW:${cloud_decrypt_dir}=RO"
 
-		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting union of ${local_decrypt_dir} and ${cloud_decrypt_dir}: ${local_media_dir}"
-		echo "unionfs $ufs_options ${ufs_mounts} ${local_media_dir}"
+		echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting union: ${local_media_dir}"
 		unionfs $ufs_options "${ufs_mounts}" "${local_media_dir}"
 	else
-		echo "[ $(date $(printenv DATE_FORMAT)) ] Plex library mountpoint: ${local_media_dir} already mounted."
+		echo "[ $(date $(printenv DATE_FORMAT)) ] Union mountpoint: ${local_media_dir} already mounted."
 	fi
 }
 
@@ -103,3 +98,5 @@ else
 	fi
 	mount_union
 fi
+
+exit 0
