@@ -61,7 +61,7 @@ rm_space () {
 
 			# Find the pathname relative to the rsoot of your remote and store filename
 			filename="$(echo "$n" | sed -e s@"${local_decrypt_dir}"@@)"
-			destpath="$(dirname "$n" | sed -e s@"${local_decrechoypt_dir}"@@)"
+			destpath="$(dirname "$n" | sed -e s@"${local_decrypt_dir}"@@)"
 
 			# Skip hidden or partial files.
 			case "$n" in
