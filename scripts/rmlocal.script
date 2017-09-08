@@ -80,8 +80,6 @@ rm_space () {
 					sleep 10
 			done
 
-			echo $n
-
 			fileSize=$(du -sb "$n" | awk '{print $1}')
 			addedSpace="$(($addedSpace + $fileSize))"
 
