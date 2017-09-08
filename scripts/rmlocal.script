@@ -37,6 +37,8 @@ rm_time () {
 			echo "[ $(date $(printenv DATE_FORMAT)) ] Moving file -> ${n} to Google Drive."
 			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
 		done
+
+	find "${local_decrypt_dir}" -depth -type d -empty -delete
 }
 
 rm_space () {
@@ -88,7 +90,9 @@ rm_space () {
 			# Move file to remote destination[s], retaining path
 			echo "[ $(date $(printenv DATE_FORMAT)) ] Moving file -> ${n} to Google Drive. Freeing up ${fileSizeGb} GB"
 			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
-	done
+		done
+
+	find "${local_decrypt_dir}" -depth -type d -empty -delete
 }
 
 # If script is already running; abort.
