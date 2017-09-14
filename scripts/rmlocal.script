@@ -38,7 +38,7 @@ rm_time () {
 			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
 		done
 
-	find "${local_decrypt_dir}" -depth -type d -empty -delete
+	find "${local_decrypt_dir}" -mindepth 1 -type d -empty -delete
 }
 
 rm_space () {
@@ -92,7 +92,7 @@ rm_space () {
 			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
 		done
 
-	find "${local_decrypt_dir}" -depth -type d -empty -delete
+	find "${local_decrypt_dir}" -mindepth 1 -type d -empty -delete
 }
 
 # If script is already running; abort.
