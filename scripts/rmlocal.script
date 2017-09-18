@@ -41,6 +41,40 @@ rm_time () {
 	find "${local_decrypt_dir}" -mindepth 1 -type d -empty -delete
 }
 
+rm_instant () {
+	# Generate filelist and iterate through it...
+	find "${local_decrypt_dir}" -type f |
+		while read -r n; do
+
+			# Find the pathname relative to the root of your remote and store filename
+			filename="$(echo "$n" | sed -e s@"${local_decrypt_dir}"@@)"
+			destpath="$(dirname "$n" | sed -e s@"${local_decrypt_dir}"@@)"
+
+			# Skip hidden or partial files.
+			case "$n" in
+				(*.partial~) continue ;;
+				(*_HIDDEN~) continue ;;
+				(*.QTFS) continue ;;
+				(*.unionfs-fuse*) continue ;;
+				(*.DS_STORE) continue ;;
+			esac
+
+			# If file is opened by another process, wait until it isn't.
+			while [ "$(lsof "$n" >/dev/null 2>&1)" ] || \
+				[ "$(lsof "${local_decrypt_dir}/${n}" >/dev/null 2>&1)" ] || \
+				[ "$(lsof "${local_media_dir}/${n}" >/dev/null 2>&1)" ]; do
+				echo "[ $(date $(printenv DATE_FORMAT)) ] File -> ${n} in use. Retrying in 10 seconds."
+				sleep 10
+			done
+
+			# Move file to remote destination[s], retaining path
+			echo "[ $(date $(printenv DATE_FORMAT)) ] Moving file -> ${n} to Google Drive."
+			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+		done
+
+	find "${local_decrypt_dir}" -mindepth 1 -type d -empty -delete
+}
+
 rm_space () {
 	maxSize=$(($REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB * 1000 * 1000 * 1000))
 	currentSize="$(du -sb "$local_decrypt_dir" | awk '{print $1}')"
@@ -103,10 +137,14 @@ fi
 
 check_rclone_cloud
 
+echo "Removing files based on ${REMOVE_LOCAL_FILES_BASED_ON}"
+
 if [ "$REMOVE_LOCAL_FILES_BASED_ON" = "space" ]; then
 	rm_space
 elif [ "$REMOVE_LOCAL_FILES_BASED_ON" = "time" ]; then
 	rm_time
+elif [ "$REMOVE_LOCAL_FILES_BASED_ON" = "instant" ]; then
+	rm_instant
 else
 	echo "[ $(date $(printenv DATE_FORMAT)) ] no option to remove old files"
 	exit 02

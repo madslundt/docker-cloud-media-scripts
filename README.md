@@ -64,10 +64,10 @@ Environment variables:
 * `-e CLEAR_CHUNK_AGE` - Plexdrive: The maximum age of a cached chunk file (default **24h**) - this is ignored if `CLEAR_CHUNK_MAX_SIZE` is set
 * `-e MONGO_DATABASE` - Mongo database used for Plexdrive (default **plexdrive**)
 * `-e DATE_FORMAT` - Date format for loggin (default **+%F@%T**)
-* `-e REMOVE_LOCAL_FILES_BASED_ON` - Remove local files based on `space` or `time` (default **space**)
-* `-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` - Remove local files when local storage exceeds this value in GB (default **100**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
-* `-e FREEUP_ATLEAST_GB` - Remove atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time
-* `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space
+* `-e REMOVE_LOCAL_FILES_BASED_ON` - Remove local files based on `space`, `time` or `instant` (default **space**)
+* `-e REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB` - Remove local files when local storage exceeds this value in GB (default **100**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time or instant
+* `-e FREEUP_ATLEAST_GB` - Remove atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time or instant
+* `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space or instant
 * `-e READ_ONLY` If Rclone and Plexdrive should be read only or not. 0 means writeable and 1 means read only (default **1**)
 * `-e PGID` Group id
 * `-e PUID` User id
@@ -174,7 +174,7 @@ Everytime new media is retrieved it should be added to `/local-media`. By adding
 
 By having a cronjob to rmlocal it will sooner or later move media from `/local-decrypt` depending on the `REMOVE_LOCAL_FILES_BASED_ON` setting. Media is only removed from `/local-decrypt` and still appears in `/local-media` because it is still be accessable from the cloud.
 
-If `REMOVE_LOCAL_FILES_BASED_ON` is set to **space** it will only remove content (if local media size has exceeded `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB`) starting from the oldest accessed file and will only free up atleast `FREEUP_ATLEAST_GB`. If **time** is set it will only remove files older than `REMOVE_LOCAL_FILES_AFTER_DAYS`.
+If `REMOVE_LOCAL_FILES_BASED_ON` is set to **space** it will only remove content (if local media size has exceeded `REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB`) starting from the oldest accessed file and will only free up atleast `FREEUP_ATLEAST_GB`. If **time** is set it will only remove files older than `REMOVE_LOCAL_FILES_AFTER_DAYS`. If **instant** is set it will remove all files when running.
 
 *Media is never deleted locally before being uploaded successful to the cloud.*
 
