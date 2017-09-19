@@ -1,4 +1,4 @@
 #!/bin/bash
 . "/usr/bin/variables"
 
-cloudupload.script "$@" 2>&1 | tee "${log_dir}/cloudupload.log"
+cloudupload.script "$@" 2>&1 | tee -a "${log_dir}/cloudupload.log"
