@@ -75,6 +75,16 @@ Environment variables:
 
 `--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse` must be there for fuse to work within the container.
 
+If using docker-compose:
+```
+privileged: true
+   devices:
+     - /dev/fuse
+   cap_add:
+     - MKNOD
+     - SYS_ADMIN
+```
+
 # Setup
 After the docker image has been setup and running, Rclone and Plexdrive need to be configured.
 
