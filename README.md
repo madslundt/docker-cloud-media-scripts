@@ -100,7 +100,7 @@ Setup Rclone run `docker exec -ti <DOCKER_CONTAINER> rclone_setup`
  - Endpoint to your cloud storage.
 	- Create new remote [**Press N**]
 	- Give it a name example gd
-	- Choose Google Drive [**Press 7**]
+	- Choose Google Drive [**Press 8**]
 	- If you have a client id paste it here or leave it blank
 	- Choose headless machine [**Press N**]
 	- Open the url in your browser and enter the verification code
