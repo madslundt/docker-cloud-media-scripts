@@ -69,12 +69,6 @@ mount_union () {
 	fi
 
 	sleep 5
-	while [ -z "$(ls -A ${cloud_decrypt_dir})" ]
-	do
-		echo "Waiting for mount ${cloud_decrypt_dir} ..."
-		sleep 30
-	done
-
 
 	# Mount plex media directory if not already mounted.
 	if [ $(ps -ef | grep "unionfs" | grep -v "grep" | wc -l) == "0" ]; then
