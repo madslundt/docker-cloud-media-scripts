@@ -44,8 +44,8 @@ find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n'
 		# Copy file to remote destination[s], retaining path
 		
 		if [ ! -f "${cloud_decrypt_dir}${filename}" ]; then
-                        echo "[ $(date ${date_format}) ] Transfering file -> ${filename} to Google Drive."
-                        "${rclone_bin}" copy --config="${rclone_config}" $rclone_options "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
+                        echo "[ $(date $(printenv DATE_FORMAT)) ] Transfering file -> ${n} to Google Drive in ${destpath}."
+ 			rclone copy $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
                 fi
 	done
 
