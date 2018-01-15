@@ -191,7 +191,7 @@ If `REMOVE_LOCAL_FILES_BASED_ON` is set to **space** it will only remove content
 ![UML diagram](uml.png)
 
 ## Rclone
-Rclone 1.37 is currently used and tested.
+Rclone 1.39 is currently used and tested.
 
 Rclone is used to encrypt, decrypt and upload files to the cloud. It mounts and decrypts Plexdrive to a different folder (`/cloud-decrypt`) and later encrypts and uploads from a local folder (`/local-decrypt`) to the cloud.
 
