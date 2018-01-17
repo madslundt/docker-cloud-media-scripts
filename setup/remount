@@ -1,0 +1,16 @@
+#!/bin/bash
+. "/usr/bin/config"
+
+if [ -z "$(ls -A ${cloud_decrypt_dir})" ] || [ $(ps -ef | grep "unionfs" | grep -v "grep" | wc -l) == "0" ]; then
+    echo "[ $(date ${date_format}) ] Mount has dropped. Remount in progress."
+    echo "[ $(date ${date_format}) ] Unmounting..."
+    fusermount -uz "${cloud_encrypt_dir}"
+    fusermount -uz "${cloud_decrypt_dir}"
+    fusermount -uz "${local_decrypt_dir}"
+    fusermount -uz "${local_media_dir}"
+    
+    echo "[ $(date ${date_format}) ] Unmounted successfully"
+    echo "[ $(date ${date_format}) ] Mounting..."
+    exec mount
+    echo "[ $(date ${date_format}) ] Mounted successfully"
+fi
