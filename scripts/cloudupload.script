@@ -15,6 +15,8 @@ fi
 
 check_rclone_cloud
 
+addedSize=0
+oldSize=0
 
 # Generate filelist and iterate through it...
 find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n' | sort -nr | cut -d: -f2- | awk '{$1=$2=$3=""; print $0}' |
@@ -32,6 +34,10 @@ find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n'
 			(*.unionfs-fuse*) continue ;;
 			(*.DS_STORE) continue ;;
 		esac
+		
+		if [ -f "${cloud_decrypt_dir}${filename}" ]; then
+                        continue
+                fi
 
 		# If file is opened by another process, wait until it isn't.
 		while [ "$(lsof "$n" >/dev/null 2>&1)" ] || \
@@ -42,9 +48,21 @@ find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n'
 		done
 
 		# Copy file to remote destination[s], retaining path
-		if [ ! -f "${cloud_decrypt_dir}${filename}" ]; then
-                        echo "[ $(date $(printenv DATE_FORMAT)) ] Transfering file -> ${n} to Google Drive in ${destpath}."
- 			rclone copy $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+ 		rclone copy $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+		
+		fileSize=$(du -sb "$n" | awk '{print $1}')
+                addedSize=$((addedSize + fileSize))
+
+                sizeInMb=$((addedSize / 1000 / 1000))
+                diffSize=$((addedSize - oldSize))
+                if [[ "${sizeInMb}" -gt 1000 ]]; then
+                        if [[ "${diffSize}" -gt "1000000000" ]]; then # greater than 1 GB
+                                oldSize=$addedSize
+                                echo "[ $(date ${date_format}) ] $((sizeInMb / 1000)) GB uploaded"
+                        fi
+                elif [[ "${diffSize}" -gt "100000000" ]]; then # greater than 100 MB
+                        oldSize=$addedSize
+                        echo "[ $(date ${date_format}) ] ${sizeInMb} MB uploaded"
                 fi
 	done
 
