@@ -69,6 +69,8 @@ Environment variables:
 * `-e FREEUP_ATLEAST_GB` - Remove atleast this value in GB on removal (default **80**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to time or instant
 * `-e REMOVE_LOCAL_FILES_AFTER_DAYS` Remove local files older than this value in days (default **10**) - this is ignored if `REMOVE_LOCAL_FILES_BASED_ON` is set to space or instant
 * `-e READ_ONLY` If Rclone and Plexdrive should be read only or not. 0 means writeable and 1 means read only (default **1**)
+* `-e PLEX_URL` If you want to use empty trash script you have to provide the url for your Plex Media Server (default empty).
+* `-e PLEX_TOKEN` If you want to use empty trash script you have to provide the plex token for your Plex Media Server (default empty).
 * `-e PGID` Group id
 * `-e PUID` User id
 
@@ -145,6 +147,8 @@ Upload local files to cloud run: `docker exec <DOCKER_CONTAINER> cloudupload`
 Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
 
 Check if everything is running `docker exec <DOCKER_CONTAINER> check`
+
+Check if mount is up and empty trash on Plex Media Server `docker exec <DOCKER_CONTAINER> emptytrash`
 
 `cloudupload` and `rmlocal` can be ran with arguments. All arguments are passed to rclone.
 For example it is possible to run `docker exec <DOCKER_CONTAINER> cloudupload -v` to get verbose on the rclone operations in cloudupload.
