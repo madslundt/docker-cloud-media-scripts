@@ -1,0 +1,55 @@
+#!/bin/bash
+###############################################################################
+# CONFIGURATION
+###############################################################################
+# shellcheck source=config
+
+. "/usr/bin/config"
+##############################################################################
+
+getSections() {
+    if [ -z "$(printenv PLEX_URL)" ]; then
+        echo "Fill in plex url and plex token to retrieve sections. Aborting..."
+        exit 02
+    fi
+
+    sections=$(curl -s -G -L "$(printenv PLEX_URL)/library/sections?X-Plex-Token=$(printenv PLEX_TOKEN)" | xpath -e "/MediaContainer/Directory/@key" 2>&1 | sed -re 's/-- NODE --//g' | sed -re 's/key=\"//g' | sed -re 's/\"//g' | sed '/^\s*$/d' | sed '$ d' | awk 'BEGIN {sq = ""; OFS = sq "," sq} {a[$1] = NR} END { printf "" sq; for (i in a) { printf "%s%s", d, i; d = OFS}; print sq "" }')
+    echo $sections
+}
+
+emptyTrash() {
+    bash mountcheck
+
+    cloud_dir="${cloud_encrypt_dir}"
+    if [ "$encrypt_media" -eq "0" ]; then
+        cloud_dir="${cloud_decrypt_dir}"
+    fi
+
+    if mountpoint -q "$cloud_dir" && mountpoint -q "$cloud_decrypt_dir" && mountpoint -q "${local_media_dir}" && [ "$(ls -A ${cloud_decrypt_dir})" ]; then
+        echo "Refreshing library"
+        curl -s -G -L "$(printenv PLEX_URL)/library/sections/all/refresh?X-Plex-Token=$(printenv PLEX_TOKEN)"
+        sleep 60
+        
+        sections=$(getSections)
+        if [ -z "${sections}" ]; then
+            echo "Could not get sections from $(printenv PLEX_URL) with the inserted token. Aborting..."
+            exit 02
+        fi
+
+        IFS="," read -r -a arr <<< "$sections"
+        for i in "${arr[@]}"
+        do
+            if [[ ! -z "${i}" ]]; then
+                echo "Empty trash for section ${i}"
+                curl -s -X PUT -L "$(printenv PLEX_URL)/library/sections/${i}/emptyTrash?X-Plex-Token=$(printenv PLEX_TOKEN)"
+            fi
+        done
+
+        exit 0
+    else
+        echo "Mount is not up after mountcheck. Aborting..."
+        exit 02
+    fi
+}
+
+emptyTrash
