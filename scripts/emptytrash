@@ -2,4 +2,4 @@
 #!/bin/bash
 . "/usr/bin/variables"
 
-emptytrash.script "$@" 2>&1 | tee -a "${log_dir}/emptytrash.log"
+emptytrash.script "$@" 2>&1 | tee "${log_dir}/emptytrash.log"
