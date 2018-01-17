@@ -52,4 +52,12 @@ emptyTrash() {
     fi
 }
 
+if [[ -z "$(printenv PLEX_URL)" ]]; then
+    echo "PLEX_URL has not been set. Aborting empty trash"
+    exit 02
+elif [[ -z "$(printenv PLEX_TOKEN)" ]]; then
+    echo "PLEX_TOKEN has not been set. Aborting empty trash"
+    exit 02
+fi
+    
 emptyTrash
