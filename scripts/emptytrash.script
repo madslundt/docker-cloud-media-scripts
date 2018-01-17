@@ -18,14 +18,14 @@ getSections() {
 }
 
 emptyTrash() {
-    bash mountcheck
+    bash remount
 
-    cloud_dir="${cloud_encrypt_dir}"
-    if [ "$encrypt_media" -eq "0" ]; then
-        cloud_dir="${cloud_decrypt_dir}"
+    cloud_dir="${cloud_decrypt_dir}"
+    if [ "$(printenv ENCRYPT_MEDIA)" != "0" ]; then
+        cloud_dir="${cloud_encrypt_dir}"
     fi
 
-    if mountpoint -q "$cloud_dir" && mountpoint -q "$cloud_decrypt_dir" && mountpoint -q "${local_media_dir}" && [ "$(ls -A ${cloud_decrypt_dir})" ]; then
+    if "$(ls -A ${cloud_dir})" && "$(ls -A ${cloud_decrypt_dir})" && "$(ls -A ${local_media_dir})"; then
         echo "Refreshing library"
         curl -s -G -L "$(printenv PLEX_URL)/library/sections/all/refresh?X-Plex-Token=$(printenv PLEX_TOKEN)"
         sleep 60
@@ -51,13 +51,5 @@ emptyTrash() {
         exit 02
     fi
 }
-
-if [[ -z "$(printenv PLEX_URL)" ]]; then
-    echo "PLEX_URL has not been set. Aborting empty trash"
-    exit 02
-elif [[ -z "$(printenv PLEX_TOKEN)" ]]; then
-    echo "PLEX_TOKEN has not been set. Aborting empty trash"
-    exit 02
-fi
     
 emptyTrash
