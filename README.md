@@ -148,7 +148,7 @@ Remove local files run `docker exec <DOCKER_CONTAINER> rmlocal`
 
 Check if everything is running `docker exec <DOCKER_CONTAINER> check`
 
-Check if mount is up and empty trash on Plex Media Server `docker exec <DOCKER_CONTAINER> emptytrash`
+Empty trash on Plex Media Server but only if mount is up `docker exec <DOCKER_CONTAINER> emptytrash`
 
 `cloudupload` and `rmlocal` can be ran with arguments. All arguments are passed to rclone.
 For example it is possible to run `docker exec <DOCKER_CONTAINER> cloudupload -v` to get verbose on the rclone operations in cloudupload.
