@@ -18,6 +18,7 @@ check_rclone_cloud
 addedSize=0
 oldSize=0
 
+echo "[ $(date ${date_format}) ] ###### Start cloud upload ######"
 # Generate filelist and iterate through it...
 find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n' | sort -nr | cut -d: -f2- | awk '{$1=$2=$3=""; print $0}' |
 	while read -r n; do
@@ -66,5 +67,6 @@ find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n'
                 fi
 	done
 
-# success!
+echo "[ $(date ${date_format}) ] ###### Cloud upload ended successfully ######"
+
 exit 0
