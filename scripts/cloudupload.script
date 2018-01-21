@@ -18,7 +18,7 @@ check_rclone_cloud
 addedSize=0
 oldSize=0
 
-echo "[ $(date ${date_format}) ] ###### Start cloud upload ######"
+echo "[ $(date $(printenv DATE_FORMAT)) ] ###### Start cloud upload ######"
 # Generate filelist and iterate through it...
 find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n' | sort -nr | cut -d: -f2- | awk '{$1=$2=$3=""; print $0}' |
 	while read -r n; do
@@ -59,14 +59,14 @@ find "${local_decrypt_dir}" -type f -print0 | xargs -0 stat --format '%Y :%y %n'
                 if [[ "${sizeInMb}" -gt 1000 ]]; then
                         if [[ "${diffSize}" -gt "1000000000" ]]; then # greater than 1 GB
                                 oldSize=$addedSize
-                                echo "[ $(date ${date_format}) ] $((sizeInMb / 1000)) GB uploaded"
+                                echo "[ $(date $(printenv DATE_FORMAT)) ] $((sizeInMb / 1000)) GB uploaded"
                         fi
                 elif [[ "${diffSize}" -gt "100000000" ]]; then # greater than 100 MB
                         oldSize=$addedSize
-                        echo "[ $(date ${date_format}) ] ${sizeInMb} MB uploaded"
+                        echo "[$(date $(printenv DATE_FORMAT)) ] ${sizeInMb} MB uploaded"
                 fi
 	done
 
-echo "[ $(date ${date_format}) ] ###### Cloud upload ended successfully ######"
+echo "[ $(date $(printenv DATE_FORMAT)) ] ###### Cloud upload ended successfully ######"
 
 exit 0
