@@ -47,11 +47,11 @@ rm_time () {
                         if [[ "${sizeInMb}" -gt 1000 ]]; then
                                 if [[ "${diffSize}" -gt "1000000000" ]]; then # greater than 1 GB
                                         oldSize=$movedSize
-                                        echo "[ $(date ${date_format}) ] $((sizeInMb / 1000)) GB uploaded"
+                                        echo "[ $(date $(printenv DATE_FORMAT)) ] $((sizeInMb / 1000)) GB uploaded"
                                 fi
                         elif [[ "${diffSize}" -gt "100000000" ]]; then # greater than 100 MB
                                 oldSize=$movedSize
-                                echo "[ $(date ${date_format}) ] ${sizeInMb} MB uploaded"
+                                echo "[ $(date $(printenv DATE_FORMAT)) ] ${sizeInMb} MB uploaded"
                         fi
 		done
 
@@ -95,11 +95,11 @@ rm_instant () {
                         if [[ "${sizeInMb}" -gt 1000 ]]; then
                                 if [[ "${diffSize}" -gt "1000000000" ]]; then # greater than 1 GB
                                         oldSize=$movedSize
-                                        echo "[ $(date ${date_format}) ] $((sizeInMb / 1000)) GB uploaded"
+                                        echo "[ $(date $(printenv DATE_FORMAT)) ] $((sizeInMb / 1000)) GB uploaded"
                                 fi
                         elif [[ "${diffSize}" -gt "100000000" ]]; then # greater than 100 MB
                                 oldSize=$movedSize
-                                echo "[ $(date ${date_format}) ] ${sizeInMb} MB uploaded"
+                                echo "[ $(date $(printenv DATE_FORMAT)) ] ${sizeInMb} MB uploaded"
                         fi
 		done
 
@@ -157,11 +157,11 @@ rm_space () {
                         if [[ "${sizeInMb}" -gt 1000 ]]; then
                                 if [[ "${diffSize}" -gt "1000000000" ]]; then # greater than 1 GB
                                         oldSize=$movedSize
-                                        echo "[ $(date ${date_format}) ] $((sizeInMb / 1000)) GB uploaded"
+                                        echo "[ $(date $(printenv DATE_FORMAT)) ] $((sizeInMb / 1000)) GB uploaded"
                                 fi
                         elif [[ "${diffSize}" -gt "100000000" ]]; then # greater than 100 MB
                                 oldSize=$movedSize
-                                echo "[ $(date ${date_format}) ] ${sizeInMb} MB uploaded"
+                                echo "[ $(date $(printenv DATE_FORMAT)) ] ${sizeInMb} MB uploaded"
                         fi
 		done
 
