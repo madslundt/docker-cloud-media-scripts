@@ -11,6 +11,6 @@ if [ -z "$(ls -A ${cloud_decrypt_dir})" ] || [ $(ps -ef | grep "unionfs" | grep 
     
     echo "[ $(date $(printenv DATE_FORMAT)) ] Unmounted successfully"
     echo "[ $(date $(printenv DATE_FORMAT)) ] Mounting..."
-    bash mount
+    mount
     echo "[ $(date $(printenv DATE_FORMAT)) ] Mounted successfully"
 fi
