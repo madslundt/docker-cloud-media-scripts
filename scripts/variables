@@ -28,6 +28,9 @@ mongo="--mongo-database=$(printenv MONGO_DATABASE) --mongo-host=localhost"
 
 ufs_options="-o uid=${_puid:-911} -o gid=${_pgid:-911} -o cow,allow_other,direct_io,nonempty,auto_cache,sync_read"
 
+rclone_cloud_endpoint=$(printenv RCLONE_CLOUD_ENDPOINT | tr -d '"' | tr -d "'")
+rclone_local_endpoint=$(printenv RCLONE_LOCAL_ENDPOINT | tr -d '"' | tr -d "'")
+
 log_dir="/log"
 if [ ! -d "${log_dir}" ]; then
 	mkdir -p "${log_dir}"
