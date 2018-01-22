@@ -37,7 +37,7 @@ rm_time () {
 			done
 
 			# Move file to remote destination[s], retaining path
-			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+			rclone move $rclone_options "$@" "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
 			
 			fileSize=$(du -sb "$n" | awk '{print $1}')
                         movedSize=$((movedSize + fileSize))
@@ -85,7 +85,7 @@ rm_instant () {
 			done
 
 			# Move file to remote destination[s], retaining path
-			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+			rclone move $rclone_options "$@" "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
 			
 			fileSize=$(du -sb "$n" | awk '{print $1}')
                         movedSize=$((movedSize + fileSize))
@@ -147,7 +147,7 @@ rm_space () {
 			done
 
 			# Move file to remote destination[s], retaining path
-			rclone move $rclone_options "$@" "$n" "$(printenv RCLONE_CLOUD_ENDPOINT)${destpath}" >/dev/null 2>&1
+			rclone move $rclone_options "$@" "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
 			
 			fileSize=$(du -sb "$n" | awk '{print $1}')
                         movedSize=$((movedSize + fileSize))
