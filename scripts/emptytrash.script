@@ -16,7 +16,7 @@ getSections() {
         exit 02
     fi
 
-    sections=$(curl -s -G -L "${plex_url}/library/sections?X-Plex-Token=${plex_token}" | xpath -e "/MediaContainer/Directory/@key" 2>&1 | sed -re 's/-- NODE --//g' | sed -re 's/key=\"//g' | sed -re 's/\"//g' | sed '/^\s*$/d' | sed '$ d' | awk 'BEGIN {sq = ""; OFS = sq "," sq} {a[$1] = NR} END { printf "" sq; for (i in a) { printf "%s%s", d, i; d = OFS}; print sq "" }')
+    sections=$(curl -s -G -L "${plex_url}/library/sections?X-Plex-Token=${plex_token}" | xpath -e "/MediaContainer/Directory/@key" 2>&1 | sed -n 's/.*key="\([^"]*\).*/\1/p')
     echo $sections
 }
 
