@@ -34,8 +34,7 @@ emptyTrash() {
             exit 02
         fi
 
-        IFS="," read -r -a arr <<< "$sections"
-        for i in $arr
+        for i in $sections
         do
             if [[ ! -z "${i}" ]]; then
                 echo "Empty trash for section ${i}"
