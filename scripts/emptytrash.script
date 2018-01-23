@@ -18,14 +18,9 @@ getSections() {
 }
 
 emptyTrash() {
-    remount
+    . "/usr/bin/check"
 
-    cloud_dir="${cloud_decrypt_dir}"
-    if [ "$(printenv ENCRYPT_MEDIA)" != "0" ]; then
-        cloud_dir="${cloud_encrypt_dir}"
-    fi
-
-    if "$(ls -A ${cloud_dir})" && "$(ls -A ${cloud_decrypt_dir})" && "$(ls -A ${local_media_dir})"; then
+    if [ "$all_good" -eq "1" ]; then
         echo "Refreshing library"
         curl -s -G -L "$(printenv PLEX_URL)/library/sections/all/refresh?X-Plex-Token=$(printenv PLEX_TOKEN)"
         sleep 60
