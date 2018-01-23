@@ -7,13 +7,16 @@
 . "/usr/bin/config"
 ##############################################################################
 
+plex_url=$(printenv PLEX_URL | tr -d '"' | tr -d "'")
+plex_token=$(printenv PLEX_TOKEN | tr -d '"' | tr -d "'")
+
 getSections() {
-    if [ -z "$(printenv PLEX_URL)" ]; then
+    if [ -z "${plex_url}" ]; then
         echo "Fill in plex url and plex token to retrieve sections. Aborting..."
         exit 02
     fi
 
-    sections=$(curl -s -G -L "$(printenv PLEX_URL)/library/sections?X-Plex-Token=$(printenv PLEX_TOKEN)" | xpath -e "/MediaContainer/Directory/@key" 2>&1 | sed -re 's/-- NODE --//g' | sed -re 's/key=\"//g' | sed -re 's/\"//g' | sed '/^\s*$/d' | sed '$ d' | awk 'BEGIN {sq = ""; OFS = sq "," sq} {a[$1] = NR} END { printf "" sq; for (i in a) { printf "%s%s", d, i; d = OFS}; print sq "" }')
+    sections=$(curl -s -G -L "${plex_url}/library/sections?X-Plex-Token=${plex_token}" | xpath -e "/MediaContainer/Directory/@key" 2>&1 | sed -re 's/-- NODE --//g' | sed -re 's/key=\"//g' | sed -re 's/\"//g' | sed '/^\s*$/d' | sed '$ d' | awk 'BEGIN {sq = ""; OFS = sq "," sq} {a[$1] = NR} END { printf "" sq; for (i in a) { printf "%s%s", d, i; d = OFS}; print sq "" }')
     echo $sections
 }
 
@@ -22,12 +25,12 @@ emptyTrash() {
 
     if [ "$all_good" -eq "1" ]; then
         echo "Refreshing library"
-        curl -s -G -L "$(printenv PLEX_URL)/library/sections/all/refresh?X-Plex-Token=$(printenv PLEX_TOKEN)"
+        curl -s -G -L "${plex_url}/library/sections/all/refresh?X-Plex-Token=${plex_token}"
         sleep 60
         
         sections=$(getSections)
         if [ -z "${sections}" ]; then
-            echo "Could not get sections from $(printenv PLEX_URL) with the inserted token. Aborting..."
+            echo "Could not get sections from ${plex_url} with the inserted token. Aborting..."
             exit 02
         fi
 
@@ -36,7 +39,7 @@ emptyTrash() {
         do
             if [[ ! -z "${i}" ]]; then
                 echo "Empty trash for section ${i}"
-                curl -s -X PUT -L "$(printenv PLEX_URL)/library/sections/${i}/emptyTrash?X-Plex-Token=$(printenv PLEX_TOKEN)"
+                curl -s -X PUT -L "${plex_url}/library/sections/${i}/emptyTrash?X-Plex-Token=${plex_token}"
             fi
         done
 
