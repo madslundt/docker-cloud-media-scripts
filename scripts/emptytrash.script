@@ -16,7 +16,7 @@ getSections() {
         exit 02
     fi
 
-    sections=$(curl -s -G -L "${plex_url}/library/sections?X-Plex-Token=${plex_token}" | xpath -e "/MediaContainer/Directory/@key" 2>&1 | sed -n 's/.*key="\([^"]*\).*/\1/p')
+    sections=$(curl -s -G -L "${plex_url}/library/sections?X-Plex-Token=${plex_token}" | sed -n 's/.*key="\([^"]*\).*/\1/p')
     echo $sections
 }
 
