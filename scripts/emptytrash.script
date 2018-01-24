@@ -20,13 +20,27 @@ getSections() {
     echo $sections
 }
 
+isRefreshing() {
+    refreshing=$(curl -s -G -L "${plex_url}/library/sections?X-Plex-Token=${plex_token}" | grep 'refreshing="1"')
+
+    echo $refreshing
+}
+
 emptyTrash() {
     . "/usr/bin/check"
 
     if [ "$all_good" -eq "1" ]; then
         echo "Refreshing library"
         curl -s -G -L "${plex_url}/library/sections/all/refresh?X-Plex-Token=${plex_token}"
-        sleep 60
+        
+        echo "[ $(date ${date_format}) ] Library refreshing"
+        while true; do
+            sleep 10
+            if [[ -z $(isRefreshing) ]]; then
+                break
+            fi
+        done
+        echo "[ $(date ${date_format}) ] Library refresh completed"
         
         sections=$(getSections)
         if [ -z "${sections}" ]; then
