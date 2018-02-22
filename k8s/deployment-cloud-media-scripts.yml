@@ -1,0 +1,108 @@
+---
+# https://hub.docker.com/r/madslundt/cloud-media-scripts/
+# https://github.com/madslundt/docker-cloud-media-scripts
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: cloud-media-scripts
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cloud-media-scripts
+    spec:
+      containers:
+        - name: cloud-media-scripts
+          image: nomuas/cloud-media-scripts
+          ports:
+          securityContext:
+            capabilities:
+              add:
+                - MKNOD
+                - SYS_ADMIN
+          env:
+            - name: ENCRYPT_MEDIA
+              value: '1'
+            - name: BUFFER_SIZE
+              value: 500M
+            - name: MAX_READ_AHEAD
+              value: 30G
+            - name: CHECKERS
+              value: '16'
+            - name: RCLONE_CLOUD_ENDPOINT
+              value: 'gd-crypt:'
+            - name: RCLONE_LOCAL_ENDPOINT
+              value: 'local-crypt:'
+            - name: CHUNK_SIZE
+              value: 10M
+            # - name: CLEAR_CHUNK_MAX_SIZE
+            #   value: 45G
+            - name: CLEAR_CHUNK_AGE
+              value: 24h
+            - name: MONGO_DATABASE
+              value: plexdrive
+            - name: DATE_FORMAT
+              value: '+%F@%T'
+            - name: REMOVE_LOCAL_FILES_BASED_ON
+              value: space
+            - name: REMOVE_LOCAL_FILES_WHEN_SPACE_EXCEEDS_GB
+              value: '100'
+            - name: FREEUP_ATLEAST_GB
+              value: '80'
+            - name: REMOVE_LOCAL_FILES_AFTER_DAYS
+              value: '10'
+            - name: READ_ONLY
+              value: '1'
+            # - name: PUID
+            #   value: '911'
+            # - name: PGID
+            #   value: '911'         
+          imagePullPolicy: "Always"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: fuse-volume
+              mountPath: /dev/fuse
+            - name: local-media-volume
+              mountPath: /local-media
+              mountPropagation: Bidirectional
+            - name: local-decrypt-volume
+              mountPath: /local-decrypt
+              mountPropagation: Bidirectional
+            # - name: conf-volume
+            #   mountPath: /config
+            - name: chunks-volume
+              mountPath: /chunks
+            - name: logs-volume
+              mountPath: /log
+            - name: config
+              mountPath: /secrets
+              readOnly: true
+      volumes:
+        - name: fuse-volume
+          hostPath:
+            path: /dev/fuse
+            type: CharDevice
+        - name: local-media-volume
+          hostPath:
+            path: /mnt/cloud/local-media
+        - name: local-decrypt-volume
+          hostPath:
+            path: /srv/cloud/local-decrypt
+        # - name: conf-volume
+        #   persistentVolumeClaim:
+        #     claimName: cloud-media-scripts-conf  
+        - name: chunks-volume
+          persistentVolumeClaim:
+            claimName: cloud-media-scripts-chunks
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: cloud-media-scripts-logs    
+        - name: config
+          secret:
+            secretName: cloud-media-scripts-secrets        
+      nodeSelector:
+        label: "value"

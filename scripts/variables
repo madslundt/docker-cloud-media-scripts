@@ -35,3 +35,8 @@ log_dir="/log"
 if [ ! -d "${log_dir}" ]; then
 	mkdir -p "${log_dir}"
 fi
+
+secrets_dir="/secrets"
+if [ -d "${secrets_dir}" ]; then
+    cp ${secrets_dir}/* /config/
+fi
