@@ -36,10 +36,11 @@ rm_time () {
 				sleep 10
 			done
 
+			fileSize=$(du -sb "$n" | awk '{print $1}')
+
 			# Move file to remote destination[s], retaining path
 			rclone move $rclone_options "$@" "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
 			
-			fileSize=$(du -sb "$n" | awk '{print $1}')
                         movedSize=$((movedSize + fileSize))
 
                         sizeInMb=$((movedSize / 1000 / 1000))
@@ -84,10 +85,11 @@ rm_instant () {
 				sleep 10
 			done
 
+			fileSize=$(du -sb "$n" | awk '{print $1}')
+
 			# Move file to remote destination[s], retaining path
 			rclone move $rclone_options "$@" "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
 			
-			fileSize=$(du -sb "$n" | awk '{print $1}')
                         movedSize=$((movedSize + fileSize))
 
                         sizeInMb=$((movedSize / 1000 / 1000))
@@ -146,10 +148,11 @@ rm_space () {
 					sleep 10
 			done
 
+			fileSize=$(du -sb "$n" | awk '{print $1}')
+			
 			# Move file to remote destination[s], retaining path
 			rclone move $rclone_options "$@" "$n" "${rclone_cloud_endpoint}${destpath}" >/dev/null 2>&1
 			
-			fileSize=$(du -sb "$n" | awk '{print $1}')
                         movedSize=$((movedSize + fileSize))
 
                         sizeInMb=$((movedSize / 1000 / 1000))
