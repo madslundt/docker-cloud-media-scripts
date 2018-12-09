@@ -40,3 +40,7 @@ secrets_dir="/secrets"
 if [ -d "${secrets_dir}" ]; then
     cp ${secrets_dir}/* /config/
 fi
+
+cloud_upload_time=$(printenv CLOUDUPLOADTIME)
+rm_delete_time=$(printenv RMDELETETIME)
+cron_log=/log/cron.log

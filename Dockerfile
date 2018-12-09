@@ -13,6 +13,7 @@ RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y \
         curl \
+        cron \
         fuse \
         unionfs-fuse \
         bc \
@@ -73,6 +74,9 @@ ENV REMOVE_LOCAL_FILES_AFTER_DAYS "30"
 ENV PLEX_URL ""
 ENV PLEX_TOKEN ""
 
+#cron
+ENV CLOUDUPLOADTIME "0 1 * * *"
+ENV RMDELETETIME "0 6 * * *"
 
 ####################
 # SCRIPTS
@@ -113,3 +117,4 @@ WORKDIR /data
 # ENTRYPOINT
 ####################
 ENTRYPOINT ["/init"]
+CMD cron -f
