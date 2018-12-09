@@ -1,0 +1,2 @@
+0 0 * * * echo "Running cloudupload" && cloudupload
+0 10 * * * echo "Running rmlocal" && rmlocal
