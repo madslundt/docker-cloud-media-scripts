@@ -73,7 +73,7 @@ Environment variables:
 * `-e PLEX_TOKEN` If you want to use empty trash script you have to provide the plex token for your Plex Media Server (default empty).
 * `-e PGID` Group id
 * `-e PUID` User id
-* `-e UNION_PROGRAM` - MERGERFS or UNIONFS
+
 
 `--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse` must be there for fuse to work within the container.
 

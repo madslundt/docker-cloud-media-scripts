@@ -13,7 +13,6 @@ RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y \
         curl \
-	cron \
         fuse \
         unionfs-fuse \
         bc \
@@ -82,19 +81,6 @@ COPY setup/* /usr/bin/
 COPY install.sh /
 COPY scripts/* /usr/bin/
 COPY root /
-COPY crontab /etc/cron.d/upload
-
-# Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/upload
-
-# Apply cron job
-RUN crontab /etc/cron.d/upload
-
-# Create the log file to be able to run tail
-RUN touch /var/log/cron.log
-
-# Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
 
 RUN chmod a+x /install.sh && \
     sh /install.sh && \
