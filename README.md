@@ -74,7 +74,7 @@ Environment variables:
 * `-e PGID` Group id
 * `-e PUID` User id
 * `-e CLOUDUPLOADTIME` - When to run cloudupload using cron expression (default 0 1 * * * ) set to "0 0 31 2 0" to disable
-* `-e RMDELETETIME` -- When to run cloudupload using cron expression (default 0 1 * * *) set to "0 0 31 2 0" to disable
+* `-e RMDELETETIME` -- When to run cloudupload using cron expression (default 0 6 * * *) set to "0 0 31 2 0" to disable
 
 `--privileged --cap-add=MKNOD --cap-add=SYS_ADMIN --device=/dev/fuse` must be there for fuse to work within the container.
 
