@@ -93,4 +93,10 @@ else
 	mount_union
 fi
 
+#Output environmental variables for cron
+env >> /etc/environment
+printf "${cloud_upload_time} cloudupload >> ${cron_log} 2>&1\n${rm_delete_time} rmlocal >> ${cron_log} 2>&1\n" > /etc/cron.d/upload
+chmod 0644 /etc/cron.d/upload
+crontab /etc/cron.d/upload
+
 exit 0
