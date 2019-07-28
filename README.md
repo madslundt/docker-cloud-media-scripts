@@ -42,6 +42,8 @@ Example `-v /media:/local-media:shared`.
 
 **:shared** is also needed on if you mount these folders to your other Docker containers.
 
+Before creating the docker container (with the :shared appends), run the command `sudo mount --make-shared /volume1` (remember to change /volume1 to match your setup). *Thanks to freakshock88 for pointing this out*
+
 Volumes:
 * `-v /local-media` - Union of all files stored on cloud and local - Append **:shared**
 * `-v /local-decrypt` - Local files stored on disk - Append **:shared**
